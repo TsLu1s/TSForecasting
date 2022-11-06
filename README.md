@@ -100,8 +100,8 @@ data = data.rename(columns={'DateTime_Column': 'Date','Target_Name_Column':'y'})
 data=data[['Date',"y"]]
     
     
-Train_size=0.98
-Forecast_Size=30
+Train_size=0.95
+Forecast_Size=15
 Window_Size=Forecast_Size # Recommended
 Granularity='1h' # 1m,30m,1h,1d,1wk,1mo
 Eval_Metric="MAE" # MAPE, MSE
