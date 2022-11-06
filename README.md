@@ -183,7 +183,7 @@ Dataset = tsf.multivariable_lag(Dataset:pd.DataFrame,
     
 ```
 
-This function filters the most valuable features from the dataset. It's based on calculated variable importance in tree based models from Scikit-Learn and it can be customized by use of the parameter `total_vi`, minimal value of the total sum of relative variable\feature importance percentage selected and `algo` selecting the model for evaluation ('ExtraTrees','RandomForest' and 'GBR').
+This `feature_selection_tb` function filters the most valuable features from the dataset. It's based on calculated variable importance in tree based models from Scikit-Learn and it can be customized by use of the parameter `total_vi`, minimal value of the total sum of relative variable\feature importance percentage selected and `algo` selecting the model for evaluation ('ExtraTrees','RandomForest' and 'GBR').
 
 ```py  
 
