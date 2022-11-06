@@ -82,7 +82,7 @@ The following step is to define your future running pipeline parameters variable
  
 The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `Best_Model`[String] (most effective model), `Perf_Results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `Predictions`[DataFrame] containing every segmented window iteration performed wich can be use for analysis and objective models comparison. 
 
-The `pred_results` function forecasts the future values based on the previosly predefined parameters and the `selected model` wich specifies the choosen model used to obtain future predictions.
+The `pred_results` function forecasts the future values based on the previously predefined parameters and the `selected model` wich specifies the choosen model used to obtain future predictions.
     
 Importante Note:
 
