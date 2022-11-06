@@ -189,11 +189,11 @@ This `feature_selection_tb` function filters the most valuable features from the
 
 # Feature Selection 
 
-Selected_Columns=tsf.feature_selection_tb(Dataset:pd.DataFrame,
-                                          target:str="y",
-                                          total_vi:float=0.99,
-                                          algo:str="ExtraTrees",
-                                          estimators:int=250):
+Selected_Columns, Selected_Importance_DF=tsf.feature_selection_tb(Dataset:pd.DataFrame,
+                                                                  target:str="y",
+                                                                  total_vi:float=0.99,
+                                                                  algo:str="ExtraTrees",
+                                                                  estimators:int=250):
  ```   
     
 You can analyse the obtained performance results by using the `metrics_regression` function wich contains the most used metrics for regression predictive contexts.
