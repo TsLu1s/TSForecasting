@@ -11,7 +11,7 @@ The architecture design includes five main sections, this being: data preprocess
 
 This project aims at providing the following application capabilities:
 
-* General applicability on tabular datasets: The developed forecasting procedures are applicable on any data table associated with Time Series Forecasting scopes, based on DateTime and Target column to be predicted.
+* General applicability on tabular datasets: The developed forecasting procedures are applicable on any data table associated with Time Series Forecasting scopes, based on DateTime and Target columns to be predicted.
 
 * Hyperparameter optimization and customization: It provides full configuration for each model hyperparameter through the customization of `Model_Configs` variable dictionary values, allowing optimal performance to be obtained.
     
