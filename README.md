@@ -32,7 +32,7 @@ Major frameworks used to built this project:
 ## Performance Evaluation Structure <a name = "ta"></a>
 
 <p align="center">
-  <img src="https://i.ibb.co/ctYj6tt/Expanding-Window-TSF.png" align="center" width="600" height="450" />
+  <img src="https://i.ibb.co/ctYj6tt/Expanding-Window-TSF.png" align="center" width="500" height="450" />
   
 </p>  
     
