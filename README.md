@@ -105,7 +105,7 @@ Forecast_Size=15
 Window_Size=Forecast_Size # Recommended
 Granularity='1h' # 1m,30m,1h,1d,1wk,1mo
 Eval_Metric="MAE" # MAPE, MSE
-List_Models=['RandomForest','ExtraTrees','KNN','XGBoost','H2O_AutoML','AutoArima'] # ensemble example
+List_Models=['RandomForest','ExtraTrees','KNN','XGBoost','AutoArima'] # ensemble example
 Model_Configs ={'RandomForest':{'n_estimators':25,'random_state':42,'criterion':"squared_error",
                    'max_depth':None,'max_features':"auto"},
                'ExtraTrees':{'n_estimators':25,'random_state':42,'criterion':"squared_error",
