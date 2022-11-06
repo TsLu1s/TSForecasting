@@ -182,6 +182,19 @@ Dataset = tsf.multivariable_lag(Dataset:pd.DataFrame,
                                 drop_na:bool=True)
     
 ```
+
+This function filters the most valuable features from the dataset. It's based on calculated variable importance in tree based models from Scikit-Learn and it can be customized by use of the parameter `total_vi`, minimal value of the total sum of relative variable\feature importance percentage selected and `algo` selecting the model for evaluation ('ExtraTrees','RandomForest' and 'GBR').
+
+```py  
+
+# Feature Selection 
+
+Selected_Columns=tsf.feature_selection_tb(Dataset:pd.DataFrame,
+                                          target:str="y",
+                                          total_vi:float=0.99,
+                                          algo:str="ExtraTrees",
+                                          estimators:int=250):
+ ```   
     
 You can analyse the obtained performance results by using the `metrics_regression` function wich contains the most used metrics for regression predictive contexts.
     
