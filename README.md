@@ -86,7 +86,7 @@ The `pred_results` function forecasts the future values based on the previously 
     
 Importante Note:
 
-* Although not advisable to forecast without evaluating predictive performance first, forecast can be done without first using the `pred_performance` evaluation function, by replacing the `selected_model` parameter (default='RandomForest') in the `pred_results` function with the any choosen model.
+* Although not advisable to forecast without evaluating predictive performance first, forecast can be done without using the `pred_performance` evaluation function, by replacing the `selected_model` parameter (default='RandomForest') in the `pred_results` function with the any choosen model.
 
     
 ```py
