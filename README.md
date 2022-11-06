@@ -71,7 +71,7 @@ conda install -c h2oai h2o==3.38.0.2
 The first needed step after importing the package is to load a dataset and define your DataTime and to be predicted Target column and rename them to 'Date' and 'y', respectively.
 The following step is to define your future running pipeline parameters variables, this being:
 * Train_size: Length of Train data in wich will be applied the first Expanding Window iteration;  
-* Forecast_Size: Length of Test ahead predictions;
+* Forecast_Size: Full length of test/future ahead predictions;
 * Window_Size: Length of sliding window, Window_Size>=Forecast_Size is recommended;
 * Granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
 * Eval_Metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
