@@ -209,7 +209,7 @@ Reg_Performance = pd.DataFrame(tsf.metrics_regression(y_true,y_pred),index=[0]) 
     
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/Atlantic/blob/main/LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSForecasting/blob/main/LICENSE) for more information.
 
 ## Contact 
  
