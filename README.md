@@ -7,7 +7,7 @@
 
 The `TSForecasting` project constitutes an complete and integrated pipeline to Automate Time Series Forecasting applications through the implementation of multivariate approaches integrating regression models referring to modules such as SKLearn, H2O.ai, Autokeras and also univariate approaches of more classics methods such as Prophet, NeuralProphet and AutoArima, this following an 'Expanding Window' performance evaluation.
 
-The architecture design includes five main sections, this being: data preprocessing, feature engineering, hyperparameter optimization, forecast ensembling and forecasting method selection which are organized and customizable in a pipeline structure.
+The architecture design includes five main sections, these being: data preprocessing, feature engineering, hyperparameter optimization, forecast ensembling and forecasting method selection which are organized and customizable in a pipeline structure.
 
 This project aims at providing the following application capabilities:
 
