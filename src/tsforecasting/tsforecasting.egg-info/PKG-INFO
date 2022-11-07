@@ -1,3 +1,28 @@
+Metadata-Version: 2.1
+Name: tsforecasting
+Version: 0.0.95
+Summary: TSForecasting is an automated time series forecasting framework
+Home-page: https://github.com/TsLu1s/TSForecasting
+Author: Luís Santos
+Author-email: luisf_ssantos@hotmail.com
+License: MIT
+Keywords: data science,machine learning,time series forecasting,automated time series,multivariate time series,univariate time series,automated machine learning,automl
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Customer Service
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Intended Audience :: Healthcare Industry
+Classifier: Intended Audience :: Telecommunications Industry
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 <br>
 <p align="center">
   <h2 align="center"> TSForecasting - Automated Time Series Forecasting Framework

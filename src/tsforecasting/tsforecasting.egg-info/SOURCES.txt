@@ -1,0 +1,15 @@
+LICENSE
+README.md
+setup.py
+src/tsforecasting/tsforecasting.egg-info/PKG-INFO
+src/tsforecasting/tsforecasting.egg-info/SOURCES.txt
+src/tsforecasting/tsforecasting.egg-info/dependency_links.txt
+src/tsforecasting/tsforecasting.egg-info/requires.txt
+src/tsforecasting/tsforecasting.egg-info/top_level.txt
+src/tsforecasting/TSForecasting.py
+src/tsforecasting/tsforecasting.py
+src/tsforecasting/tsforecasting.egg-info/PKG-INFO
+src/tsforecasting/tsforecasting.egg-info/SOURCES.txt
+src/tsforecasting/tsforecasting.egg-info/dependency_links.txt
+src/tsforecasting/tsforecasting.egg-info/requires.txt
+src/tsforecasting/tsforecasting.egg-info/top_level.txt
