@@ -93,6 +93,7 @@ Importante Note:
 
 import tsforecasting as tsf
 import pandas as pd
+import h2o
 
 h2o.init() # -> Run only if using H2O_AutoML models   
 
@@ -220,7 +221,3 @@ Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
 Project Link - https://github.com/TsLu1s/TSForecasting
     
 Feel free to contact me and share your feedback.
-    
-    
-
-    
