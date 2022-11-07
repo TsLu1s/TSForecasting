@@ -217,7 +217,7 @@ Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
 
 Project Link - https://github.com/TsLu1s/TSForecasting
     
-Feel free to contact and share your feedback.
+Feel free to contact me and share your feedback.
     
     
 
