@@ -96,9 +96,10 @@ import pandas as pd
 
 h2o.init() # -> Run only if using H2O_AutoML models   
 
+data = pd.read_csv('csv_directory_path') # Dataframe Loading Example
+    
 data = data.rename(columns={'DateTime_Column': 'Date','Target_Name_Column':'y'})
 data=data[['Date',"y"]]
-    
     
 Train_size=0.95
 Forecast_Size=15
@@ -106,9 +107,9 @@ Window_Size=Forecast_Size # Recommended
 Granularity='1h' # 1m,30m,1h,1d,1wk,1mo
 Eval_Metric="MAE" # MAPE, MSE
 List_Models=['RandomForest','ExtraTrees','KNN','XGBoost','AutoArima'] # ensemble example
-Model_Configs ={'RandomForest':{'n_estimators':25,'random_state':42,'criterion':"squared_error",
+Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
                    'max_depth':None,'max_features':"auto"},
-               'ExtraTrees':{'n_estimators':25,'random_state':42,'criterion':"squared_error",
+               'ExtraTrees':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
                    'max_depth':None,'max_features':"auto"}, 
                'GBR':{'n_estimators':250,'learning_rate':0.1,'criterion':"friedman_mse",
                     'max_depth':3,'min_samples_split':5,'learning_rate':0.01,'loss':'ls'},
@@ -129,6 +130,7 @@ Model_Configs ={'RandomForest':{'n_estimators':25,'random_state':42,'criterion':
                     'weekly_seasonality':'auto','daily_seasonality':'auto','n_forecasts':1,
                     'epochs':None,'num_hidden_layers':0,'loss_func':"Huber",'optimizer':"AdamW"}
                 }
+
 
 #import warnings
 #warnings.filterwarnings("ignore", category=Warning) #-> For a clean console
