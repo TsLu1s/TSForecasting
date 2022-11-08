@@ -477,7 +477,7 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
             input_cols=list(Train.columns)
             input_cols.remove(target)
 
-            scaler = MinMaxScaler() ## -> Encoding
+            scaler = MinMaxScaler()
 
             scaler = scaler.fit(Train[input_cols])
             Train[input_cols] = scaler.transform(Train[input_cols])
@@ -629,9 +629,9 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
             elif algo=='NeuralProphet':
                 np_params=model_configs['NeuralProphet']
                 model_np = NeuralProphet(**np_params)
-                freq_np = model_np.fit(train_) ## Ver freq            
+                freq_np = model_np.fit(train_)            
                 
-                future = model_np.make_future_dataframe(train_,periods=forecast_length) #,include_history=False) # fut_prev=7 -> Uma semana*
+                future = model_np.make_future_dataframe(train_,periods=forecast_length) 
                 forecast = model_np.predict(future)
                 
                 col="yhat1"
@@ -714,7 +714,7 @@ def vertical_univariated_performance(Dataset:pd.DataFrame,
     return Total_Vertical_Metrics
 
 def select_best_model(Dataset:pd.DataFrame,
-                      eval_metric:str='MAE'): #'Mean Absolute Percentage Error','Mean Squared Error','Max Error'
+                      eval_metric:str='MAE'): 
     """
     The select_best_model function takes a Dataset containing the results of 
     several models and returns the best model based on an evaluation metric.
@@ -782,7 +782,6 @@ def pred_performance(Dataset:pd.DataFrame,
     for elemento in list_models:
     
         if elemento in list_mv:
-
             results=Multivariate_Forecast(Dataset,
                                           train_length=train_size,
                                           forecast_length=forecast_size,
@@ -927,7 +926,7 @@ def pred_results(Dataset:pd.DataFrame,
     
     target='y'
 
-    if selected_model in list_uv: #Add Prophet and Arima
+    if selected_model in list_uv:
         
         Dataframe=Dataset.copy()
         Dataframe = Dataframe.rename(columns={'Date': 'ds'})
