@@ -44,8 +44,6 @@ to construct an aggregated and robust performance analysis to each predicted poi
 
 ## Where to get it <a name = "ta"></a>
     
-The source code is currently hosted on GitHub at: https://github.com/TsLu1s/TSForecasting
-
 Binary installer for the latest released version are available at the Python Package Index (PyPI).   
 
 ## Installation  
@@ -216,8 +214,6 @@ Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSFor
 ## Contact 
  
 Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
-
-Project Link - https://github.com/TsLu1s/TSForecasting
     
 Feel free to contact me and share your feedback.
     
