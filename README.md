@@ -222,6 +222,13 @@ Project Link - https://github.com/TsLu1s/TSForecasting
     
 Feel free to contact me and share your feedback.
     
-    
-
-    
+```
+@software{Fernando_da_Silva_Santos_atlantic_2022,
+author = {Fernando da Silva Santos, Luís},
+month = {9},
+title = {{atlantic}},
+url = {https://github.com/TsLu1s/Atlantic},
+version = {1.0.0},
+year = {2022}
+}
+```
