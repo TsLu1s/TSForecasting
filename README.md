@@ -27,7 +27,6 @@ Major frameworks used to built this project:
 * [AutoKeras](https://autokeras.com/tutorial/structured_data_regression/)
 * [AutoArima](https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html)
 * [Prophet](https://facebook.github.io/prophet/docs/quick_start.html#python-api)
-
     
 ## Performance Evaluation Structure <a name = "ta"></a>
 
@@ -222,4 +221,13 @@ Project Link - https://github.com/TsLu1s/TSForecasting
     
 Feel free to contact me and share your feedback.
     
-
+ ```  
+@software{Santos_TSForecasting_-_Automated_2022,
+author = {Santos, Luís},
+month = {9},
+title = {{TSForecasting - Automated Time Series Forecasting Framework}},
+url = {https://github.com/TsLu1s/TSForecasting},
+version = {1.1.0},
+year = {2022}
+}
+ ```  
