@@ -4,7 +4,7 @@ authors:
 - family-names: "Santos"
   given-names: "Luís"
   orcid: "https://orcid:0000-0002-4121-1133"
-title: "TSForecasting"
+title: "TSForecasting - Automated Time Series Forecasting Framework"
 version: 1.1.0
 doi: ""
 date-released: 2022-09-07
