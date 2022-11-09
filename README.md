@@ -57,8 +57,14 @@ pip install tsforecasting
 In order to avoid installation issues `fbprophet` and `h2o` modules should be downloaded separately by running the following commands:
 
 ```
-conda install -c conda-forge fbprophet==0.7.1
 conda install -c h2oai h2o==3.38.0.2
+
+conda install -c conda-forge fbprophet==0.7.1
+
+## Or
+
+pip install pystan==2.19.1.1
+pip install fbprophet==0.7.1
 ```
 
 # Usage Examples
