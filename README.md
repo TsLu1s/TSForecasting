@@ -63,7 +63,6 @@ pip install fbprophet==0.7.1
 ## Option 2
 conda install -c conda-forge fbprophet==0.7.1
 ``` 
-    
 ```
 conda install -c h2oai h2o==3.38.0.2
 ```
