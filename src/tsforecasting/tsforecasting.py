@@ -20,9 +20,9 @@ import h2o
 from h2o.automl import H2OAutoML
 #import tensorflow as tf
 
-Model_Configs ={'RandomForest':{'n_estimators':25,'random_state':42,'criterion':"squared_error",
+Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
                    'max_depth':None,'max_features':"auto"},
-               'ExtraTrees':{'n_estimators':25,'random_state':42,'criterion':"squared_error",
+               'ExtraTrees':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
                    'max_depth':None,'max_features':"auto"}, 
                'GBR':{'n_estimators':250,'learning_rate':0.1,'criterion':"friedman_mse",
                     'max_depth':3,'min_samples_split':5,'learning_rate':0.01,'loss':'ls'},
