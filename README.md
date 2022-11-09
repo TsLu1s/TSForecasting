@@ -60,8 +60,9 @@ In order to avoid installation issues `fbprophet` and `h2o` modules should be do
 conda install -c h2oai h2o==3.38.0.2
 ```
 ```
+## fbprophet option 1
 conda install -c conda-forge fbprophet==0.7.1
-## or
+## fbprophet option 2
 pip install pystan==2.19.1.1
 pip install fbprophet==0.7.1
 ```
