@@ -61,7 +61,7 @@ conda install -c h2oai h2o==3.38.0.2
 ```
 ```
 conda install -c conda-forge fbprophet==0.7.1
-## Or
+## or
 pip install pystan==2.19.1.1
 pip install fbprophet==0.7.1
 ```
