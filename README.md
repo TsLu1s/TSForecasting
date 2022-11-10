@@ -82,8 +82,7 @@ The following step is to define your future running pipeline parameters variable
 * Granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
 * Eval_Metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
 (Mean Squared Error);
-* List_Models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoKeras','AutoArima',
- 'Prophet','NeuralProphet'];
+* List_Models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoKeras','AutoArima','Prophet','NeuralProphet'];
 * Model_Configs: Nested dictionary in wich are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit; 
  
 The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `Best_Model`[String] (most effective model), `Perf_Results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `Predictions`[DataFrame] containing every segmented window iteration performed wich can be use for analysis and objective models comparison. 
