@@ -43,8 +43,10 @@ This process is repeated until all time series data gets segmented and it uses a
 to construct an aggregated and robust performance analysis to each predicted point.
 
 ## Where to get it <a name = "ta"></a>
+
+The source code is currently hosted on GitHub at: https://github.com/TsLu1s/TSForecasting
     
-Binary installer for the latest released version are available at the Python Package Index (PyPI).   
+Binary installer for the latest released version is available at the Python Package Index (PyPI).   
 
 ## Installation  
 
@@ -63,6 +65,7 @@ pip install fbprophet==0.7.1
 ## Option 2
 conda install -c conda-forge fbprophet==0.7.1
 ``` 
+    
 ```
 conda install -c h2oai h2o==3.38.0.2
 ```
@@ -79,8 +82,8 @@ The following step is to define your future running pipeline parameters variable
 * Granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
 * Eval_Metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
 (Mean Squared Error);
-* List_Models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoKeras',
- 'AutoArima','Prophet','NeuralProphet'];
+* List_Models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoKeras','AutoArima',
+ 'Prophet','NeuralProphet'];
 * Model_Configs: Nested dictionary in wich are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit; 
  
 The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `Best_Model`[String] (most effective model), `Perf_Results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `Predictions`[DataFrame] containing every segmented window iteration performed wich can be use for analysis and objective models comparison. 
@@ -222,4 +225,3 @@ Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSFor
 Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
     
 Feel free to contact me and share your feedback.
-    
