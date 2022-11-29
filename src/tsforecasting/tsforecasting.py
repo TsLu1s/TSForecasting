@@ -948,9 +948,9 @@ def pred_results(Dataset:pd.DataFrame,
         if selected_model =='NeuralProphet':
             np_params=model_configs['NeuralProphet']
             model_np = NeuralProphet(**np_params)
-            freq_np = m.fit(Dataframe) ## Ver freq            
+            freq_np = m.fit(Dataframe)           
             
-            future = model_np.make_future_dataframe(Dataframe,periods=forecast_size) #,include_history=False) # fut_prev=7 -> Uma semana*
+            future = model_np.make_future_dataframe(Dataframe,periods=forecast_size) #,include_history=False) 
             forecast = model_np.predict(future)
             forecast.head()
             col='yhat1'
