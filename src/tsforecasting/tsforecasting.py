@@ -61,6 +61,7 @@ def slice_timestamp(Dataset:pd.DataFrame,date_col:str='Date'):
     :param date_col:str='Date': Specify the name of the column that contains the date information
     :return: A dataframe with the timestamp column sliced to only include the year, month and day
     """
+    
     Dataframe=Dataset.copy()
     cols=list(Dataframe.columns)
     for col in cols:
@@ -83,6 +84,7 @@ def round_cols(Dataset:pd.DataFrame,
     :param round_:int=4: Round the numbers to a certain number of decimal places
     :return: A dataframe with the same columns as the original one, but with all numeric columns rounded to 4 decimals
     """
+    
     Dataframe_=Dataset.copy()
     Df_round=Dataframe_.copy()
     list_num_cols=Df_round.select_dtypes(include=['float']).columns.tolist()
@@ -175,6 +177,7 @@ def multivariable_lag(Dataset:pd.DataFrame,
     :param drop_na:bool=True: Drop the rows with nan values
     :return: A dataframe with the lags specified by the user
     """
+    
     assert range_lags[0]>=1, "Range lags first interval value should be bigger then 1"
     assert range_lags[0]<=range_lags[1], "Range lags first interval value should be bigger then second"
     
@@ -222,6 +225,7 @@ def feature_selection_tb(Dataset:pd.DataFrame,
     :param estimators:int=250: Set the number of estimators in the randomforest and extratrees algorithms
     :return: A list of columns that are selected by the algorithm
     """
+    
     assert total_vi>=0.5 and total_vi<=1 , "total_vi value should be in [0.5,1[ interval"
     
     Train=Dataset.copy()
@@ -284,6 +288,7 @@ def metrics_regression(y_real, y_prev):
     :param y_prev: Compare the real values of y with the predicted values
     :return: A dictionary with the metrics of the regression model
     """
+    
     mae=mean_absolute_error(y_real, y_prev)
     mape = (mean_absolute_percentage_error(y_real, y_prev))*100
     mse=mean_squared_error(y_real, y_prev)
@@ -314,6 +319,7 @@ def model_prediction(Train:pd.DataFrame,
     :param algo:str='RandomForest': Select the model to be used
     :return: The predictions of the model
     """
+    
     Selected_Cols= list(Train.columns)
     Selected_Cols.remove(target)
     Selected_Cols.append(target) 
@@ -413,6 +419,7 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
     :param granularity:str='1m': Define the time interval of the data
     :return: A dataframe with the predicted values and the window number
     """
+    
     assert train_length>=0.3 and train_length<=1 , "train_length value should be in [0.3,1[ interval"
 
     list_completa_dfs,list_y_true,list_y_pred=[],[],[]
@@ -539,6 +546,7 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
     :param granularity:str=&quot;1m&quot;: Set the granularity of the time series
     :return: A dataframe with the predictions
     """
+    
     list_completa_dfs,list_y_true,list_y_pred=[],[],[]
     
     target='y'
@@ -680,6 +688,7 @@ def vertical_univariated_performance(Dataset:pd.DataFrame,
     :param forecast_length:int: Indicate the number of steps ahead that we want to forecast
     :return: A dataframe with the metrics of performance for each step ahead
     """
+    
     df_=Dataset.copy()
 
     target="y"
@@ -713,7 +722,8 @@ def select_best_model(Dataset:pd.DataFrame,
     :param Dataset:pd.DataFrame: Pass the dataframe to be evaluated
     :param eval_metric:str='MAE': Select the evaluation metric to be used in the function
     :return: The best model (the one with the lowest mean absolute error)
-    """ 
+    """
+    
     df=Dataset.copy()
     model_perf = {}
     
@@ -764,6 +774,7 @@ def pred_performance(Dataset:pd.DataFrame,
     :param eval_metric:str=&quot;MAE&quot;: Select the best model based on the selected eval_metric
     :return: The best model (string), the performance of all models and the predictions for each model
     """
+    
     Pred_Dfs,Pred_Values,target=[],[],"y"
     
     list_mv=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','AutoKeras','XGBoost','H2O_AutoML']
@@ -820,6 +831,7 @@ def pred_dataset(Dataset:pd.DataFrame,
     :param granularity:str='1d': Specify the frequency of the time series
     :return: A dataframe with the timestamp of the last row of our dataset, and a number of rows equal to forecast_size
     """
+    
     Dataframe=Dataset.copy()
     Dataframe=slice_timestamp(Dataframe)
 
@@ -904,6 +916,7 @@ def pred_results(Dataset:pd.DataFrame,
     :param granularity:str: Define the time interval of the data
     :return: A dataframe with the predicted values
     """
+    
     Dataset=slice_timestamp(Dataset)
     Dataset_Pred=pred_dataset(Dataset,forecast_size,granularity)
     Dataset["Values"]=0
