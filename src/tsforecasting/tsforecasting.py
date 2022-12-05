@@ -106,18 +106,8 @@ def engin_date(Dataset:pd.DataFrame,
     :param Dataset:pd.DataFrame: Pass the dataset
     :param Drop:bool=False: Decide whether or not to drop the original datetime columns from the returned dataset
     :return: A dataframe with the date features engineered
-    :doc-author: Trelent
     """
-    """
-    The engin_date function takes a DataFrame and returns a DataFrame with the date features engineered.
-    The function has two parameters: 
-    Dataset: A Pandas DataFrame containing at least one column of datetime data. 
-    Drop: A Boolean value indicating whether or not to drop the original datetime columns from the returned dataset.
-    
-    :param Dataset:pd.DataFrame: Pass the dataset
-    :param Drop:bool=False: Drop the original timestamp columns
-    :return: The dataframe with the date features generated
-    """
+
     Dataset_=Dataset.copy()
     Df=Dataset_.copy()
     Df=slice_timestamp(Df)
