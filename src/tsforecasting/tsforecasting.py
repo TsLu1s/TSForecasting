@@ -30,7 +30,7 @@ Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion'
                'GeneralizedLR':{'power':1,'alpha':0.5,'link':'log','fit_intercept':True,
                     'max_iter':100,'warm_start':False,'verbose':0},
                'XGBoost':{'objective':'reg:squarederror','n_estimators':1000,'nthread':24},
-               'H2O_AutoML':{'max_models':50,'nfolds':0,'seed':1,'max_runtime_secs':120,
+               'H2O_AutoML':{'max_models':50,'nfolds':0,'seed':1,'max_runtime_secs':30,
                     'sort_metric':'AUTO','exclude_algos':['GBM','DeepLearning']},
                'AutoKeras':{'max_trials':1,'overwrite':42,'loss':"mean_squared_error",
                     'max_model_size':None,'epochs':50},
@@ -61,7 +61,6 @@ def slice_timestamp(Dataset:pd.DataFrame,date_col:str='Date'):
     :param date_col:str='Date': Specify the name of the column that contains the date information
     :return: A dataframe with the timestamp column sliced to only include the year, month and day
     """
-    
     Dataframe=Dataset.copy()
     cols=list(Dataframe.columns)
     for col in cols:
@@ -84,7 +83,6 @@ def round_cols(Dataset:pd.DataFrame,
     :param round_:int=4: Round the numbers to a certain number of decimal places
     :return: A dataframe with the same columns as the original one, but with all numeric columns rounded to 4 decimals
     """
-    
     Dataframe_=Dataset.copy()
     Df_round=Dataframe_.copy()
     list_num_cols=Df_round.select_dtypes(include=['float']).columns.tolist()
@@ -108,8 +106,18 @@ def engin_date(Dataset:pd.DataFrame,
     :param Dataset:pd.DataFrame: Pass the dataset
     :param Drop:bool=False: Decide whether or not to drop the original datetime columns from the returned dataset
     :return: A dataframe with the date features engineered
+    :doc-author: Trelent
     """
-
+    """
+    The engin_date function takes a DataFrame and returns a DataFrame with the date features engineered.
+    The function has two parameters: 
+    Dataset: A Pandas DataFrame containing at least one column of datetime data. 
+    Drop: A Boolean value indicating whether or not to drop the original datetime columns from the returned dataset.
+    
+    :param Dataset:pd.DataFrame: Pass the dataset
+    :param Drop:bool=False: Drop the original timestamp columns
+    :return: The dataframe with the date features generated
+    """
     Dataset_=Dataset.copy()
     Df=Dataset_.copy()
     Df=slice_timestamp(Df)
@@ -177,7 +185,6 @@ def multivariable_lag(Dataset:pd.DataFrame,
     :param drop_na:bool=True: Drop the rows with nan values
     :return: A dataframe with the lags specified by the user
     """
-    
     assert range_lags[0]>=1, "Range lags first interval value should be bigger then 1"
     assert range_lags[0]<=range_lags[1], "Range lags first interval value should be bigger then second"
     
@@ -225,7 +232,6 @@ def feature_selection_tb(Dataset:pd.DataFrame,
     :param estimators:int=250: Set the number of estimators in the randomforest and extratrees algorithms
     :return: A list of columns that are selected by the algorithm
     """
-    
     assert total_vi>=0.5 and total_vi<=1 , "total_vi value should be in [0.5,1[ interval"
     
     Train=Dataset.copy()
@@ -288,7 +294,6 @@ def metrics_regression(y_real, y_prev):
     :param y_prev: Compare the real values of y with the predicted values
     :return: A dictionary with the metrics of the regression model
     """
-    
     mae=mean_absolute_error(y_real, y_prev)
     mape = (mean_absolute_percentage_error(y_real, y_prev))*100
     mse=mean_squared_error(y_real, y_prev)
@@ -319,7 +324,6 @@ def model_prediction(Train:pd.DataFrame,
     :param algo:str='RandomForest': Select the model to be used
     :return: The predictions of the model
     """
-    
     Selected_Cols= list(Train.columns)
     Selected_Cols.remove(target)
     Selected_Cols.append(target) 
@@ -419,7 +423,6 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
     :param granularity:str='1m': Define the time interval of the data
     :return: A dataframe with the predicted values and the window number
     """
-    
     assert train_length>=0.3 and train_length<=1 , "train_length value should be in [0.3,1[ interval"
 
     list_completa_dfs,list_y_true,list_y_pred=[],[],[]
@@ -461,20 +464,18 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
         
         if (len(Test[target])>=forecast_length):
             
-            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1)
+            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1, "of", iterations)
             
             print('Rows Train:', len(Train))
             
             print('Rows Test:', len(Test))
             
             Train[[target]]=Train[[target]].astype('int32')
-    
-            ########### Encoding Application
             
             input_cols=list(Train.columns)
             input_cols.remove(target)
 
-            scaler = MinMaxScaler()
+            scaler = MinMaxScaler() ## -> Encoding Application
 
             scaler = scaler.fit(Train[input_cols])
             Train[input_cols] = scaler.transform(Train[input_cols])
@@ -491,13 +492,15 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
             
             y_t_axys=list(Test.index[0:forecast_length])
             
-            plt.plot(y_true_list, label='Actual')
-            plt.plot(y_pred_list, label='Predicted')
-            plt.plot(ylabel=y_t_axys)
-            plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iterations}.", loc='center')
-            plt.legend()
-            plt.show()
-            
+            """
+            if barplots==True:
+                plt.plot(y_true_list, label='Actual')
+                plt.plot(y_pred_list, label='Predicted')
+                plt.plot(ylabel=y_t_axys)
+                plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iterations}.", loc='center')
+                plt.legend()
+                plt.show()
+            """
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
             x=pd.concat(list_y_true)
@@ -546,7 +549,6 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
     :param granularity:str=&quot;1m&quot;: Set the granularity of the time series
     :return: A dataframe with the predictions
     """
-    
     list_completa_dfs,list_y_true,list_y_pred=[],[],[]
     
     target='y'
@@ -589,7 +591,7 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
         
         if len(Test[target])>=forecast_length:
             
-            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1)
+            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1, "of", iterations)
             
             print('Rows Train:', len(Train))
             
@@ -627,10 +629,10 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
             elif algo=='NeuralProphet':
                 np_params=model_configs['NeuralProphet']
                 model_np = NeuralProphet(**np_params)
-                freq_np = model_np.fit(train_)            
+                freq_np = model_np.fit(train_) ## Ver freq            
                 
-                future = model_np.make_future_dataframe(train_,periods=forecast_length) 
-                forecast = model_np.predict(future)
+                future = freq_np.make_future_dataframe(train_,periods=forecast_length) 
+                forecast = freq_np.predict(future)
                 
                 col="yhat1"
                 y_pred=forecast.iloc[len(forecast)-forecast_length:,:]
@@ -640,7 +642,7 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
                 model_arima.fit(train_[[target]])
             
                 forecast = model_arima.predict(n_periods=forecast_length)
-                y_pred=forecast.to_frame()
+                y_pred=pd.DataFrame(forecast, columns = [0]) #y_pred=forecast.to_frame()
                 col=0
                 
             y_pred=y_pred[col]
@@ -650,13 +652,14 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
             y_pred_list = y_pred.tolist()
             y_true_list = y_true.tolist()
             
-            plt.plot(y_true_list, label='Actual')
-            plt.plot(y_pred_list, label='Predicted')
-            plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iterations}.", loc='center')
-            plt.legend()
-            plt.show()
-
-
+            """
+            if barplots==True:
+                plt.plot(y_true_list, label='Actual')
+                plt.plot(y_pred_list, label='Predicted')
+                plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iterations}.", loc='center')
+                plt.legend()
+                plt.show()
+            """
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
             x=pd.concat(list_y_true)
@@ -688,7 +691,6 @@ def vertical_univariated_performance(Dataset:pd.DataFrame,
     :param forecast_length:int: Indicate the number of steps ahead that we want to forecast
     :return: A dataframe with the metrics of performance for each step ahead
     """
-    
     df_=Dataset.copy()
 
     target="y"
@@ -713,7 +715,7 @@ def vertical_univariated_performance(Dataset:pd.DataFrame,
     return Total_Vertical_Metrics
 
 def select_best_model(Dataset:pd.DataFrame,
-                      eval_metric:str='MAE'): 
+                      eval_metric:str='MAE'): #'Mean Absolute Percentage Error','Mean Squared Error','Max Error'
     """
     The select_best_model function takes a Dataset containing the results of 
     several models and returns the best model based on an evaluation metric.
@@ -722,8 +724,7 @@ def select_best_model(Dataset:pd.DataFrame,
     :param Dataset:pd.DataFrame: Pass the dataframe to be evaluated
     :param eval_metric:str='MAE': Select the evaluation metric to be used in the function
     :return: The best model (the one with the lowest mean absolute error)
-    """
-    
+    """ 
     df=Dataset.copy()
     model_perf = {}
     
@@ -743,11 +744,11 @@ def select_best_model(Dataset:pd.DataFrame,
         metric_model=round(df[eval_metric_].mean(),4)
         
         model_perf[model] = metric_model
-    print("Predictive Models Performance:", model_perf)
+    print("Models Predictive Performance:", model_perf)
     best_model=min(model_perf, key=model_perf.get)
     perf_metric=model_perf[best_model]
     if len(list_models)>1:
-        print("The best performance model was", best_model, "with an (mean)", 
+        print("The model with best performance was", best_model, "with an (mean)", 
               eval_metric_, "of", perf_metric )
     return best_model
 
@@ -774,7 +775,6 @@ def pred_performance(Dataset:pd.DataFrame,
     :param eval_metric:str=&quot;MAE&quot;: Select the best model based on the selected eval_metric
     :return: The best model (string), the performance of all models and the predictions for each model
     """
-    
     Pred_Dfs,Pred_Values,target=[],[],"y"
     
     list_mv=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','AutoKeras','XGBoost','H2O_AutoML']
@@ -783,6 +783,7 @@ def pred_performance(Dataset:pd.DataFrame,
     for elemento in list_models:
     
         if elemento in list_mv:
+
             results=Multivariate_Forecast(Dataset,
                                           train_length=train_size,
                                           forecast_length=forecast_size,
@@ -831,7 +832,6 @@ def pred_dataset(Dataset:pd.DataFrame,
     :param granularity:str='1d': Specify the frequency of the time series
     :return: A dataframe with the timestamp of the last row of our dataset, and a number of rows equal to forecast_size
     """
-    
     Dataframe=Dataset.copy()
     Dataframe=slice_timestamp(Dataframe)
 
@@ -916,7 +916,6 @@ def pred_results(Dataset:pd.DataFrame,
     :param granularity:str: Define the time interval of the data
     :return: A dataframe with the predicted values
     """
-    
     Dataset=slice_timestamp(Dataset)
     Dataset_Pred=pred_dataset(Dataset,forecast_size,granularity)
     Dataset["Values"]=0
@@ -951,10 +950,10 @@ def pred_results(Dataset:pd.DataFrame,
         if selected_model =='NeuralProphet':
             np_params=model_configs['NeuralProphet']
             model_np = NeuralProphet(**np_params)
-            freq_np = m.fit(Dataframe)           
+            freq_np = model_np.fit(Dataframe)           
             
-            future = model_np.make_future_dataframe(Dataframe,periods=forecast_size) #,include_history=False) 
-            forecast = model_np.predict(future)
+            future = freq_np.make_future_dataframe(Dataframe,periods=forecast_size) 
+            forecast = freq_np.predict(future)
             forecast.head()
             col='yhat1'
             y_pred=forecast.iloc[len(forecast)-forecast_size:,:]
@@ -973,7 +972,7 @@ def pred_results(Dataset:pd.DataFrame,
             aa_params=model_configs['AutoArima']
             model_arima=auto_arima(Dataframe[['y']], **aa_params)
             y_pred = model_arima.predict(n_periods=forecast_size)
-            y_pred=y_pred.to_frame()
+            y_pred=pd.DataFrame(y_pred, columns = [0])
             col=0
         
         y_pred=y_pred[col]
