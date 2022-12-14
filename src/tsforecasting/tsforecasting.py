@@ -631,8 +631,8 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
                 model_np = NeuralProphet(**np_params)
                 freq_np = model_np.fit(train_) ## Ver freq            
                 
-                future = freq_np.make_future_dataframe(train_,periods=forecast_length) 
-                forecast = freq_np.predict(future)
+                future = model_np.make_future_dataframe(train_,periods=forecast_length) 
+                forecast = model_np.predict(future)
                 
                 col="yhat1"
                 y_pred=forecast.iloc[len(forecast)-forecast_length:,:]
@@ -952,8 +952,8 @@ def pred_results(Dataset:pd.DataFrame,
             model_np = NeuralProphet(**np_params)
             freq_np = model_np.fit(Dataframe)           
             
-            future = freq_np.make_future_dataframe(Dataframe,periods=forecast_size) 
-            forecast = freq_np.predict(future)
+            future = model_np.make_future_dataframe(Dataframe,periods=forecast_size) 
+            forecast = model_np.predict(future)
             forecast.head()
             col='yhat1'
             y_pred=forecast.iloc[len(forecast)-forecast_size:,:]
