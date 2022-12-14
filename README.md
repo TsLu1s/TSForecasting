@@ -168,7 +168,7 @@ y_predict = tsf.model_prediction(Train:pd.DataFrame,
                                  Test:pd.DataFrame,
                                  target:str="y",
                                  model_configs:dict=Model_Configs,
-                                 algo:str='RandomForest'):
+                                 algo:str='RandomForest')
 ```       
     
     
