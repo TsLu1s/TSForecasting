@@ -122,7 +122,7 @@ Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion'
                'GeneralizedLR':{'power':1,'alpha':0.5,'link':'log','fit_intercept':True,
                     'max_iter':100,'warm_start':False,'verbose':0},
                'XGBoost':{'objective':'reg:squarederror','n_estimators':1000,'nthread':24},
-               'H2O_AutoML':{'max_models':50,'nfolds':0,'seed':1,'max_runtime_secs':120,
+               'H2O_AutoML':{'max_models':50,'nfolds':0,'seed':1,'max_runtime_secs':30,
                     'sort_metric':'AUTO','exclude_algos':['GBM','DeepLearning']},
                'AutoKeras':{'max_trials':1,'overwrite':42,'loss':"mean_squared_error",
                     'max_model_size':None,'epochs':50},
@@ -140,7 +140,7 @@ Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion'
 #import warnings
 #warnings.filterwarnings("ignore", category=Warning) #-> For a clean console
 
-Best_Model,Perf_Results,Predictions=tsf.pred_performance(Dataset=data,
+best_Model,perf_results,predictions=tsf.pred_performance(Dataset=data,
                                                          train_size=Train_size,
                                                          forecast_size=Forecast_Size,
                                                          window_size=Window_Size,
@@ -196,7 +196,7 @@ This `feature_selection_tb` function filters the most valuable features from the
 
 # Feature Selection 
 
-Selected_Columns, Selected_Importance_DF=tsf.feature_selection_tb(Dataset:pd.DataFrame,
+selected_Columns, selected_importance_df=tsf.feature_selection_tb(Dataset:pd.DataFrame,
                                                                   target:str="y",
                                                                   total_vi:float=0.99,
                                                                   algo:str="ExtraTrees",
