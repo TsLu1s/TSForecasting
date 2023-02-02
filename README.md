@@ -84,7 +84,7 @@ The following step is to define your future running pipeline parameters variable
               'AutoArima','Prophet','NeuralProphet'];
 * Model_Configs: Nested dictionary in wich are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit; 
  
-The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `Best_Model`[String] (most effective model), `Perf_Results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `Predictions`[DataFrame] containing every segmented window iteration performed wich can be use for analysis and objective models comparison. 
+The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `best_model`[String] (most effective model), `perf_results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `predictions`[DataFrame] containing every segmented window iteration performed wich can be use for analysis and objective models comparison. 
 
 The `pred_results` function forecasts the future values based on the previously predefined parameters and the `selected model` wich specifies the choosen model used to obtain future predictions.
     
@@ -209,7 +209,7 @@ You can analyse the obtained performance results by using the `metrics_regressio
  
 # Regression Performance Metrics
 
-Reg_Performance = pd.DataFrame(tsf.metrics_regression(y_true,y_pred),index=[0])    # y_true:list, y_pred:list
+reg_performance = pd.DataFrame(tsf.metrics_regression(y_true,y_pred),index=[0])    # y_true:list, y_pred:list
         
 ```
 
