@@ -18,7 +18,6 @@ import autokeras as ak
 import xgboost
 import h2o
 from h2o.automl import H2OAutoML
-#import tensorflow as tf
 
 Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
                    'max_depth':None,'max_features':"auto"},
@@ -44,13 +43,6 @@ Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion'
                     'epochs':None,'num_hidden_layers':0,'loss_func':"Huber",'optimizer':"AdamW"}
                 }
 
-def  reset_index_DF(Dataset:pd.DataFrame):
-    
-    Dataset=Dataset.reset_index()
-    Dataset.drop(Dataset.columns[0], axis=1, inplace=True)
-    
-    return Dataset
-
 def slice_timestamp(Dataset:pd.DataFrame,date_col:str='Date'):
     """
     The slice_timestamp function takes a dataframe and returns the same dataframe with the date column sliced to just include
@@ -61,14 +53,14 @@ def slice_timestamp(Dataset:pd.DataFrame,date_col:str='Date'):
     :param date_col:str='Date': Specify the name of the column that contains the date information
     :return: A dataframe with the timestamp column sliced to only include the year, month and day
     """
-    Dataframe=Dataset.copy()
-    cols=list(Dataframe.columns)
+    df=Dataset.copy()
+    cols=list(df.columns)
     for col in cols:
         if col==date_col:
-            Dataframe[date_col] = Dataframe[date_col].astype(str)
-            Dataframe[date_col] = Dataframe[date_col].str.slice(0,19)
-            Dataframe[date_col] = pd.to_datetime(Dataframe[date_col])
-    return Dataframe
+            df[date_col] = df[date_col].astype(str)
+            df[date_col] = df[date_col].str.slice(0,19)
+            df[date_col] = pd.to_datetime(df[date_col])
+    return df
 
 def round_cols(Dataset:pd.DataFrame,
                target,round_:int=4):
@@ -83,21 +75,20 @@ def round_cols(Dataset:pd.DataFrame,
     :param round_:int=4: Round the numbers to a certain number of decimal places
     :return: A dataframe with the same columns as the original one, but with all numeric columns rounded to 4 decimals
     """
-    Dataframe_=Dataset.copy()
-    Df_round=Dataframe_.copy()
-    list_num_cols=Df_round.select_dtypes(include=['float']).columns.tolist()
+    df_=Dataset.copy()
+    df_round=df_.copy()
+    list_num_cols=df_round.select_dtypes(include=['float']).columns.tolist()
     
     for elemento in list_num_cols:
         if elemento==target:
             list_num_cols.remove(target)
     for col in list_num_cols:
-        Df_round[[col]]=Df_round[[col]].round(round_)
+        df_round[[col]]=df_round[[col]].round(round_)
         
-    return Df_round
+    return df_round
 
 def engin_date(Dataset:pd.DataFrame,
                Drop:bool=False):
-
     """
     The engin_date function takes a DataFrame and returns a DataFrame with the date features engineered.
     The function has two parameters: 
@@ -162,6 +153,7 @@ def multivariable_lag(Dataset:pd.DataFrame,
                       target:str="y",
                       range_lags:list=[1,10],
                       drop_na:bool=True):
+    
     """
     The multivariable_lag function takes a Pandas DataFrame and returns a new DataFrame with the target variable 
     lagged by the number of periods specified in range_lags. The function also removes NaN values from the dataset, 
@@ -175,35 +167,37 @@ def multivariable_lag(Dataset:pd.DataFrame,
     :param drop_na:bool=True: Drop the rows with nan values
     :return: A dataframe with the lags specified by the user
     """
+    
     assert range_lags[0]>=1, "Range lags first interval value should be bigger then 1"
     assert range_lags[0]<=range_lags[1], "Range lags first interval value should be bigger then second"
     
     Df=Dataset.copy()
-    Dataframe=Df.copy()
-    Dataframe=slice_timestamp(Dataframe)
+    Df_=Df.copy()
+    Df_=slice_timestamp(Df_)
     
     lag_str,list_dfs='',[]
 
     for elemento in range(range_lags[0],range_lags[1]+1):
         lag_str=str(elemento)
-        lag_str='lag_'+lag_str
-        Df_Final=pd.DataFrame({'target': Df[target],
+        lag_str=target+'_lag_'+lag_str
+        df_final=pd.DataFrame({'target': Df[target],
                       lag_str: Df[target].shift(elemento)
                       })
-        Df_Final=Df_Final.drop('target',axis=1)
-        Dataframe[lag_str]=Df_Final[lag_str]
-    cols,Cols_Input=list(Dataframe.columns),list(Dataframe.columns)
-    Cols_Input.remove(target)
+        df_final=df_final.drop('target',axis=1)
+        Df_[lag_str]=df_final[lag_str]
+    cols,input_cols=list(Df_.columns),list(Df_.columns)
+    input_cols.remove(target)
     last_col=cols[len(cols)-1:]
     if drop_na==True:
-        Dataframe = Dataframe.dropna(axis=0, subset=last_col)
+        Df_ = Df_.dropna(axis=0, subset=last_col)
     elif drop_na==False:
-        Dataframe[Cols_Input]=Dataframe[Cols_Input].apply(lambda x: x.fillna(x.mean()),axis=0)
+        Df_[input_cols]=Df_[input_cols].apply(lambda x: x.fillna(x.mean()),axis=0)
     for col in cols:
         if col=='Date':
-            Dataframe=Dataframe.set_index(['Date']) 
+            Df_=Df_.set_index(['Date']) 
             break
-    return Dataframe
+        
+    return Df_
 
 def feature_selection_tb(Dataset:pd.DataFrame,
                          target:str="y",
@@ -225,13 +219,13 @@ def feature_selection_tb(Dataset:pd.DataFrame,
     assert total_vi>=0.5 and total_vi<=1 , "total_vi value should be in [0.5,1[ interval"
     
     Train=Dataset.copy()
-    Selected_Cols= list(Train.columns)
-    Selected_Cols.remove(target)
-    Selected_Cols.append(target)
-    Train=Train[Selected_Cols]
+    sel_cols= list(Train.columns)
+    sel_cols.remove(target)
+    sel_cols.append(target)
+    Train=Train[sel_cols]
    
-    X_train = Train.iloc[:, 0:(len(Selected_Cols)-1)].values
-    y_train = Train.iloc[:, (len(Selected_Cols)-1)].values
+    X_train = Train.iloc[:, 0:(len(sel_cols)-1)].values
+    y_train = Train.iloc[:, (len(sel_cols)-1)].values
     
     if algo=='ExtraTrees':
         fs_model = ExtraTreesRegressor(n_estimators=estimators)
@@ -244,7 +238,7 @@ def feature_selection_tb(Dataset:pd.DataFrame,
         fs_model.fit(X_train, y_train)
 
     column_imp=fs_model.feature_importances_
-    column_names=Selected_Cols.copy()
+    column_names=sel_cols.copy()
     column_names.remove(target)
     
     Feat_imp = pd.Series(column_imp)
@@ -266,29 +260,29 @@ def feature_selection_tb(Dataset:pd.DataFrame,
             break
     Va_df = Va_df.sort_values(["percentage"], ascending=False)
     #print("Approximate minimum value of Relative Percentage:",n)
-    Selected_Columns=[]
+    sel_cols_=[]
     for rows in Va_df["variable"]:
-        Selected_Columns.append(rows)
-    Selected_Columns.append(target)
+        sel_cols_.append(rows)
+    sel_cols_.append(target)
     
-    return Selected_Columns, Va_df
+    return sel_cols_, Va_df
 
-def metrics_regression(y_real, y_prev):
+def metrics_regression(y_true, y_prev):
     """
     The metrics_regression function calculates the metrics for regression models.
-    It takes as input two arrays: y_real and y_prev, which are the real values 
+    It takes as input two arrays: y_true and y_prev, which are the real values 
     of a target variable and its predictions respectively. The function returns 
     a dictionary with all the metrics.
     
-    :param y_real: Store the real values of the target variable
+    :param y_true: Store the real values of the target variable
     :param y_prev: Compare the real values of y with the predicted values
     :return: A dictionary with the metrics of the regression model
     """
-    mae=mean_absolute_error(y_real, y_prev)
-    mape = (mean_absolute_percentage_error(y_real, y_prev))*100
-    mse=mean_squared_error(y_real, y_prev)
-    evs= explained_variance_score(y_real, y_prev)
-    maximo_error= max_error(y_real, y_prev)
+    mae=mean_absolute_error(y_true, y_prev)
+    mape = (mean_absolute_percentage_error(y_true, y_prev))*100
+    mse=mean_squared_error(y_true, y_prev)
+    evs= explained_variance_score(y_true, y_prev)
+    maximo_error= max_error(y_true, y_prev)
     metrics_pred_regression= {'Mean Absolute Error': mae, 
                               'Mean Absolute Percentage Error': mape,
                               'Mean Squared Error': mse,
@@ -314,16 +308,16 @@ def model_prediction(Train:pd.DataFrame,
     :param algo:str='RandomForest': Select the model to be used
     :return: The predictions of the model
     """
-    Selected_Cols= list(Train.columns)
-    Selected_Cols.remove(target)
-    Selected_Cols.append(target) 
-    Train=Train[Selected_Cols]
-    Test=Test[Selected_Cols]   
+    sel_cols= list(Train.columns)
+    sel_cols.remove(target)
+    sel_cols.append(target) 
+    Train=Train[sel_cols]
+    Test=Test[sel_cols]   
     
-    X_train = Train.iloc[:, 0:(len(Selected_Cols)-1)].values
-    X_test = Test.iloc[:, 0:(len(Selected_Cols)-1)].values
-    y_train = Train.iloc[:, (len(Selected_Cols)-1)].values
-    y_test = Test.iloc[:, (len(Selected_Cols)-1)].values
+    X_train = Train.iloc[:, 0:(len(sel_cols)-1)].values
+    X_test = Test.iloc[:, 0:(len(sel_cols)-1)].values
+    y_train = Train.iloc[:, (len(sel_cols)-1)].values
+    y_test = Test.iloc[:, (len(sel_cols)-1)].values
     
     if algo=='RandomForest':
         rf_params=model_configs['RandomForest']
@@ -359,21 +353,21 @@ def model_prediction(Train:pd.DataFrame,
         Test[target]=Test[target].fillna(0) ## Avoid H2O OS_Error
         Test[target]=Test[target].astype(np.float) ## Avoid H2O OS_Error
         Train_h2o,Test_h2o=h2o.H2OFrame(Train),h2o.H2OFrame(Test)
-        Input_Cols=Selected_Cols.copy()
-        Input_Cols.remove("y")
+        input_cols=sel_cols.copy()
+        input_cols.remove("y")
         aml_params=model_configs['H2O_AutoML']
         aml = H2OAutoML(**aml_params) 
-        aml.train(x=Input_Cols ,y=target ,training_frame=Train_h2o)
+        aml.train(x=input_cols ,y=target ,training_frame=Train_h2o)
         
         leaderboards = aml.leaderboard
         leaderboard_df= leaderboards.as_data_frame()
-        Id_Modelo_Lider=leaderboard_df['model_id'][0]
-          
-        H2O_Modelo_Lider=h2o.get_model(Id_Modelo_Lider)
+        id_leader_model=leaderboard_df['model_id'][0]
+        h2o_leader_model=h2o.get_model(id_leader_model)
         
-        coluna_previsao = H2O_Modelo_Lider.predict(Test_h2o)
-        coluna_previsao = coluna_previsao.asnumeric()
-        y_predict= coluna_previsao.as_data_frame()['predict']
+        pred_col = h2o_leader_model.predict(Test_h2o)
+        pred_col = pred_col.asnumeric()
+        y_predict= pred_col.as_data_frame()['predict']
+        
     elif algo=='XGBoost':
         xg_params=model_configs['XGBoost']
         regressor_XG = xgboost.XGBRegressor(**xg_params)
@@ -415,7 +409,7 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
     """
     assert train_length>=0.3 and train_length<=1 , "train_length value should be in [0.3,1[ interval"
 
-    list_completa_dfs,list_y_true,list_y_pred=[],[],[]
+    dfs_list,list_y_true,list_y_pred=[],[],[]
     
     target='y'   
     
@@ -426,19 +420,19 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
 
     Df = multivariable_lag(Df,target,range_lags=[forecast_length,forecast_length*3])
 
-    Df_Final = Df.copy()
+    df_final = Df.copy()
     
-    size_Train=int((train_length*len(Df_Final)))
+    size_Train=int((train_length*len(df_final)))
 
-    Train=Df_Final.iloc[:size_Train,:]
-    Test=Df_Final.iloc[size_Train:,:]
+    Train=df_final.iloc[:size_Train,:]
+    Test=df_final.iloc[size_Train:,:]
     
     Train[target]=Train[target].astype(np.int64)
     Test[target]=Test[target].astype(np.int64)    
     
     assert len(Test)>=forecast_length , "forecast_length>=len(Test), try to reduce your train_size ratio"
     
-    iterations = (int((len(Test))/rolling_window_size))
+    iterations,iters = (int((len(Test))/rolling_window_size)),(int((len(Test)-forecast_length)/rolling_window_size))+1
       
     for rolling_cycle in range(0, iterations):
             
@@ -449,12 +443,12 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
         
         size_Train=size_Train+window
         
-        Train=Df_Final.iloc[:size_Train,:]
-        Test=Df_Final.iloc[size_Train:,:]
+        Train=df_final.iloc[:size_Train,:]
+        Test=df_final.iloc[size_Train:,:]
         
         if (len(Test[target])>=forecast_length):
             
-            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1, "of", iterations)
+            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1, "of", iters)
             
             print('Rows Train:', len(Train))
             
@@ -465,7 +459,7 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
             input_cols=list(Train.columns)
             input_cols.remove(target)
 
-            scaler = MinMaxScaler() ## -> Encoding Application
+            scaler = MinMaxScaler() 
 
             scaler = scaler.fit(Train[input_cols])
             Train[input_cols] = scaler.transform(Train[input_cols])
@@ -487,36 +481,31 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
                 plt.plot(y_true_list, label='Actual')
                 plt.plot(y_pred_list, label='Predicted')
                 plt.plot(ylabel=y_t_axys)
-                plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iterations}.", loc='center')
+                plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iters}.", loc='center')
                 plt.legend()
                 plt.show()
             """
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
-            x=pd.concat(list_y_true)
-            y=pd.concat(list_y_pred)
-            x=reset_index_DF(x)
-            y=reset_index_DF(y)
+            x,y=pd.concat(list_y_true),pd.concat(list_y_pred) 
+            x,y=x.reset_index(drop=True),y.reset_index(drop=True)
             df = pd.DataFrame()
-            df[['y_true']]=x
-            df[['y_pred']]=y
-            
-            df[['Window']]=rolling_cycle
+            df = pd.DataFrame({'y_true': x,'y_pred': y,'Window':rolling_cycle})
             df_=df.iloc[len(df)-forecast_length:,:]
             df_.index=Test.index[0:forecast_length]
 
-            list_completa_dfs.append(df_)
+            dfs_list.append(df_)
 
-    Df_Pred=pd.concat(list_completa_dfs)
+    df_pred=pd.concat(dfs_list)
 
-    Df_Pred['Window']=Df_Pred['Window']+1
-    Df_Pred['y_pred'] = Df_Pred['y_pred'].astype(str) 
-    Df_Pred['y_pred'] = Df_Pred['y_pred'].apply(lambda x: x.replace('[', ''))
-    Df_Pred['y_pred'] = Df_Pred['y_pred'].apply(lambda x: x.replace(']', ''))
-    Df_Pred['y_pred'] = pd.to_numeric(Df_Pred['y_pred'])
-    Df_Pred['y_pred'] = Df_Pred['y_pred'].round(3)
+    df_pred['Window'] = df_pred['Window']+1
+    df_pred['y_pred'] = df_pred['y_pred'].astype(str) 
+    df_pred['y_pred'] = df_pred['y_pred'].apply(lambda x: x.replace('[', ''))
+    df_pred['y_pred'] = df_pred['y_pred'].apply(lambda x: x.replace(']', ''))
+    df_pred['y_pred'] = pd.to_numeric(df_pred['y_pred'])
+    df_pred['y_pred'] = df_pred['y_pred'].round(4)
 
-    return Df_Pred
+    return df_pred
 
 def Univariate_Forecast(Dataset:pd.DataFrame,
                         train_length:float,
@@ -539,28 +528,28 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
     :param granularity:str=&quot;1m&quot;: Set the granularity of the time series
     :return: A dataframe with the predictions
     """
-    list_completa_dfs,list_y_true,list_y_pred=[],[],[]
+    dfs_list,list_y_true,list_y_pred=[],[],[]
     
     target='y'
     
     Dataset=slice_timestamp(Dataset)
-    train_split_df=Dataset.copy()
     Dataframe=Dataset.copy()
-        
-    Df_Final = Dataframe[['Date', target]]
-    Df_Final = Df_Final.rename(columns={'Date': 'ds'}) 
+    Dataframe=Dataframe.iloc[forecast_length*3:,:]  ## Equal data lenght to Multivariate Approach given the drop in multivariate lags*  
     
-    size_Train=int((train_length*len(Df_Final)))
+    df_final = Dataframe[['Date', target]]
+    df_final = df_final.rename(columns={'Date': 'ds'}) 
     
-    Train=Df_Final.iloc[:size_Train,:]
-    Test=Df_Final.iloc[size_Train:,:]
+    size_Train=int((train_length*len(df_final)))
+    
+    Train=df_final.iloc[:size_Train,:]
+    Test=df_final.iloc[size_Train:,:]
     
     Train[target]=Train[target].astype(np.int64)
     Test[target]=Test[target].astype(np.int64)
     
     assert len(Test)>=forecast_length , "forecast_length>=len(Test), try to reduce your train_size ratio"
     
-    iterations = (int((len(Test))/rolling_window_size))
+    iterations,iters = (int((len(Test))/rolling_window_size)),(int((len(Test)-forecast_length)/rolling_window_size))+1
     
     if algo=='AutoArima':
     
@@ -576,12 +565,12 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
         
         size_Train=size_Train+window
         
-        Train=Df_Final.iloc[:size_Train,:]
-        Test=Df_Final.iloc[size_Train:,:]
+        Train=df_final.iloc[:size_Train,:]
+        Test=df_final.iloc[size_Train:,:]
         
         if len(Test[target])>=forecast_length:
             
-            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1, "of", iterations)
+            print('Algorithm Evaluation:', algo,'|| Window Iteration:', rolling_cycle + 1, "of", iters)
             
             print('Rows Train:', len(Train))
             
@@ -619,7 +608,7 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
             elif algo=='NeuralProphet':
                 np_params=model_configs['NeuralProphet']
                 model_np = NeuralProphet(**np_params)
-                freq_np = model_np.fit(train_) ## Ver freq            
+                freq_np = model_np.fit(train_) #Ver freq            
                 
                 future = model_np.make_future_dataframe(train_,periods=forecast_length) 
                 forecast = model_np.predict(future)
@@ -646,30 +635,25 @@ def Univariate_Forecast(Dataset:pd.DataFrame,
             if barplots==True:
                 plt.plot(y_true_list, label='Actual')
                 plt.plot(y_pred_list, label='Predicted')
-                plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iterations}.", loc='center')
+                plt.title(f"{algo} || Window Iteration: {rolling_cycle+1} of {iters}.", loc='center')
                 plt.legend()
                 plt.show()
             """
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
-            x=pd.concat(list_y_true)
-            y=pd.concat(list_y_pred) 
-            x=reset_index_DF(x)
-            y=reset_index_DF(y)
+            x,y=pd.concat(list_y_true),pd.concat(list_y_pred) 
+            x,y=x.reset_index(drop=True),y.reset_index(drop=True)
             df = pd.DataFrame()
-            df[['y_true']]=x
-            df[['y_pred']]=y
-            df[['Window']]=rolling_cycle
+            df = pd.DataFrame({'y_true': x,'y_pred': y,'Window':rolling_cycle})
             df_=df.iloc[len(df)-forecast_length:,:]
             
             df_.index=Test['ds'][0:forecast_length]
-            list_completa_dfs.append(df_)
+            dfs_list.append(df_)
 
-    Df_Pred=pd.concat(list_completa_dfs)
+    df_pred=pd.concat(dfs_list)
+    df_pred['Window']=df_pred['Window']+1
 
-    Df_Pred['Window']=Df_Pred['Window']+1
-
-    return Df_Pred
+    return df_pred
 
 def vertical_univariated_performance(Dataset:pd.DataFrame,
                                      forecast_length:int):
@@ -687,22 +671,22 @@ def vertical_univariated_performance(Dataset:pd.DataFrame,
     ahead_forecast_list,steps_list,list_dfs=list(range(1,forecast_length+1)),(list(dict.fromkeys(df_['Window'].tolist()))),[]
 
     for elemento_step in steps_list:
-        df_Filtered=df_[df_['Window']==elemento_step]
-        df_Filtered['V_Window']=ahead_forecast_list
-        list_dfs.append(df_Filtered)
-    Df_Vertical= pd.concat(list_dfs)
+        df_filter=df_[df_['Window']==elemento_step]
+        df_filter['V_Window']=ahead_forecast_list
+        list_dfs.append(df_filter)
+    df_vertical= pd.concat(list_dfs)
     
-    ahead_steps,list_metrics = (list(dict.fromkeys(Df_Vertical['V_Window'].tolist()))),[]
+    ahead_steps,list_metrics = (list(dict.fromkeys(df_vertical['V_Window'].tolist()))),[]
 
     for element in ahead_steps:
-        x=Df_Vertical.loc[Df_Vertical['V_Window'] == element]
+        x=df_vertical.loc[df_vertical['V_Window'] == element]
         vertical_metrics=pd.DataFrame(metrics_regression(x['y_true'],x['y_pred']),index=[0])
         vertical_metrics[['Forecast_Length']]=element
         list_metrics.append(vertical_metrics)
 
-    Total_Vertical_Metrics = pd.concat(list_metrics)
+    total_vertical_metrics = pd.concat(list_metrics)
 
-    return Total_Vertical_Metrics
+    return total_vertical_metrics
 
 def select_best_model(Dataset:pd.DataFrame,
                       eval_metric:str='MAE'): #'Mean Absolute Percentage Error','Mean Squared Error','Max Error'
@@ -907,11 +891,11 @@ def pred_results(Dataset:pd.DataFrame,
     :return: A dataframe with the predicted values
     """
     Dataset=slice_timestamp(Dataset)
-    Dataset_Pred=pred_dataset(Dataset,forecast_size,granularity)
+    df_pred=pred_dataset(Dataset,forecast_size,granularity)
     Dataset["Values"]=0
-    Dataset_Pred["Values"]=1
-    Dataset_Final= pd.concat([Dataset,Dataset_Pred])
-    Dataset_Final.index=Dataset_Final['Date']
+    df_pred["Values"]=1
+    df_final= pd.concat([Dataset,df_pred])
+    df_final.index=df_final['Date']
     
     list_mv=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','AutoKeras','XGBoost','H2O_AutoML']
     list_uv=['NeuralProphet','Prophet','AutoArima']
@@ -920,9 +904,9 @@ def pred_results(Dataset:pd.DataFrame,
 
     if selected_model in list_uv:
         
-        Dataframe=Dataset.copy()
-        Dataframe = Dataframe.rename(columns={'Date': 'ds'})
-        Dataframe = Dataframe[['ds', target]]
+        df=Dataset.copy()
+        df = df.rename(columns={'Date': 'ds'})
+        df = df[['ds', target]]
         
         if granularity=="1m":
             frequency='min'
@@ -940,9 +924,9 @@ def pred_results(Dataset:pd.DataFrame,
         if selected_model =='NeuralProphet':
             np_params=model_configs['NeuralProphet']
             model_np = NeuralProphet(**np_params)
-            freq_np = model_np.fit(Dataframe)           
+            freq_np = model_np.fit(df)           
             
-            future = model_np.make_future_dataframe(Dataframe,periods=forecast_size) 
+            future = model_np.make_future_dataframe(df,periods=forecast_size) 
             forecast = model_np.predict(future)
             forecast.head()
             col='yhat1'
@@ -951,7 +935,7 @@ def pred_results(Dataset:pd.DataFrame,
         elif selected_model =='Prophet':
             pr_params=model_configs['Prophet']
             m = Prophet(**pr_params)
-            model_p = m.fit(Dataframe)
+            model_p = m.fit(df)
             
             future = model_p.make_future_dataframe(periods=forecast_size,freq=frequency)
             forecast = model_p.predict(future)
@@ -960,40 +944,40 @@ def pred_results(Dataset:pd.DataFrame,
             
         elif selected_model =='AutoArima':
             aa_params=model_configs['AutoArima']
-            model_arima=auto_arima(Dataframe[['y']], **aa_params)
+            model_arima=auto_arima(df[['y']], **aa_params)
             y_pred = model_arima.predict(n_periods=forecast_size)
             y_pred=pd.DataFrame(y_pred, columns = [0])
             col=0
         
         y_pred=y_pred[col]
         
-        Dataset_Final['y'][len(Dataset_Final)-forecast_size:]=y_pred
-        Dataset_Final['Values']=Dataset_Final['Values'].replace(0,'Real')
-        Dataset_Final['Values']=Dataset_Final['Values'].replace(1,'Predicted')
-        Dataset_Final=round_cols(Dataset_Final, target)
+        df_final['y'][len(df_final)-forecast_size:]=y_pred
+        df_final['Values']=df_final['Values'].replace(0,'Real')
+        df_final['Values']=df_final['Values'].replace(1,'Predicted')
+        df_final=round_cols(df_final, target)
 
     elif selected_model in list_mv:
 
-        Dataset_Final=engin_date(Dataset_Final,Drop=False)
-        Dataset_Final=multivariable_lag(Dataset_Final,target,range_lags=[forecast_size,forecast_size*3]) 
+        df_final=engin_date(df_final,Drop=False)
+        df_final=multivariable_lag(df_final,target,range_lags=[forecast_size,forecast_size*3]) 
         
-        Train=Dataset_Final.iloc[:len(Dataset_Final)-forecast_size,:]
-        Test=Dataset_Final.iloc[len(Dataset_Final)-forecast_size:,:]
+        Train=df_final.iloc[:len(df_final)-forecast_size,:]
+        Test=df_final.iloc[len(df_final)-forecast_size:,:]
 
-        input_cols=list(Dataset_Final.columns)
+        input_cols=list(df_final.columns)
         input_cols.remove(target)  
         
         scaler = MinMaxScaler()
-        
         scaler = scaler.fit(Train[input_cols])
+        
         Train[input_cols] = scaler.transform(Train[input_cols])
         Test[input_cols] = scaler.transform(Test[input_cols])
 
         y_pred=model_prediction(Train, Test,target,model_configs=model_configs,algo=selected_model)
-        Dataset_Final['y'][len(Dataset_Final)-forecast_size:]=y_pred
-        Dataset_Final['Values']=Dataset_Final['Values'].replace(0,'Real')
-        Dataset_Final['Values']=Dataset_Final['Values'].replace(1,'Predicted')
-        Dataset_Final['Date']=Dataset_Final.index
-        Dataset_Final=Dataset_Final[['Date','y','Values']]
+        df_final['y'][len(df_final)-forecast_size:]=y_pred
+        df_final['Values']=df_final['Values'].replace(0,'Real')
+        df_final['Values']=df_final['Values'].replace(1,'Predicted')
+        df_final['Date']=df_final.index
+        df_final=df_final[['Date','y','Values']]
 
-    return Dataset_Final
+    return df_final
