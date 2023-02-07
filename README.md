@@ -44,7 +44,7 @@ to construct an aggregated and robust performance analysis to each predicted poi
 
 ## Where to get it <a name = "ta"></a>
     
-Binary installer for the latest released version is available at the Python Package Index (PyPI).   
+Binary installer for the latest released version is available at the Python Package Index [(PyPI)](https://pypi.org/project/tsforecasting/).   
 
 ## Installation  
 
