@@ -106,12 +106,12 @@ data = pd.read_csv('csv_directory_path') # Dataframe Loading Example
 data = data.rename(columns={'DateTime_Column': 'Date','Target_Name_Column':'y'})
 data=data[['Date',"y"]]
     
-Train_size=0.95
-Forecast_Size=15
-Window_Size=Forecast_Size # Recommended
-Granularity='1d' # 1m,30m,1h,1d,1wk,1mo
-Eval_Metric="MAE" # MAPE, MSE
-List_Models=['RandomForest','ExtraTrees','KNN','XGBoost','AutoArima'] # ensemble example
+train_size_=0.95
+forecast_size_=15
+window_size_=Forecast_Size # Recommended
+granularity_='1d' # 1m,30m,1h,1d,1wk,1mo
+eval_metric_="MAE" # MAPE, MSE
+list_models_=['RandomForest','ExtraTrees','KNN','XGBoost','AutoArima'] # ensemble example
 Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
                    'max_depth':None,'max_features':"auto"},
                'ExtraTrees':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
@@ -140,20 +140,20 @@ Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion'
 #import warnings
 #warnings.filterwarnings("ignore", category=Warning) #-> For a clean console
 
-best_Model,perf_results,predictions=tsf.pred_performance(Dataset=data,
-                                                         train_size=Train_size,
-                                                         forecast_size=Forecast_Size,
-                                                         window_size=Window_Size,
-                                                         list_models=List_Models,
+best_model,perf_results,predictions=tsf.pred_performance(Dataset=data,
+                                                         train_size=train_size_,
+                                                         forecast_size=forecast_size_,
+                                                         window_size=window_size_,
+                                                         list_models=list_models_,
                                                          model_configs=Model_Configs,
-                                                         granularity=Granularity,
-                                                         eval_metric=Eval_Metric)
+                                                         granularity=granularity_,
+                                                         eval_metric=eval_metric_)
     
 dataset_pred=tsf.pred_results(Dataset=data,
-                              forecast_size=Forecast_Size,
+                              forecast_size=forecast_size_,
                               model_configs=Model_Configs,
-                              granularity=Granularity,
-                              selected_model=Best_Model)
+                              granularity=granularity_,
+                              selected_model=best_model)
 ```  
 
 ## 2. TSForecasting - Extra Auxiliar Functions
