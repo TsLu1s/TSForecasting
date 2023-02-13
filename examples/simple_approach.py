@@ -9,7 +9,9 @@ warnings.filterwarnings("ignore",category=Warning)
 
 #source_data="https://www.kaggle.com/datasets/kandij/electric-production"
 
-data = pd.read_csv('TSForecasting_dev/data/Electric_Production.csv')
+url="https://raw.githubusercontent.com/TsLu1s/TSForecasting/main/data/Electric_Production.csv"
+
+data= pd.read_csv(url) 
 
 data['DATE'] = pd.to_datetime(data['DATE'])
 
@@ -21,7 +23,7 @@ train_size_=0.9
 forecast_size_=10
 window_size_=10
 granularity_='1d' # 1m,30m,1h,1d,1wk,1mo
-list_models_=['RandomForest', 'ExtraTrees', 'GBR', 'KNN', 'GeneralizedLR', 'XGBoost','AutoArima','Prophet']#, 'AutoKeras',#H2O_AutoML 'Prophet']
+list_models_=['RandomForest', 'ExtraTrees', 'GBR', 'KNN', 'GeneralizedLR', 'XGBoost','AutoArima','Prophet']#, 'AutoKeras',#H2O_AutoML 'NeuralProphet'
 eval_metric_="MAE" # MAPE, MSE
 
 
