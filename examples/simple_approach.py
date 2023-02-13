@@ -32,7 +32,7 @@ Model_Configs["RandomForest"]["n_estimators"]=50
 Model_Configs["ExtraTrees"]["n_estimators"]=50
 Model_Configs["GBR"]["n_estimators"]=50
 
-
+## Forecast Model Ensemble Evalution
 best_model,perf_results,predictions=tsf.pred_performance(Dataset=data, 
                                                          train_size=train_size_,
                                                          forecast_size=forecast_size_,
@@ -42,6 +42,7 @@ best_model,perf_results,predictions=tsf.pred_performance(Dataset=data,
                                                          granularity=granularity_,
                                                          eval_metric=eval_metric_)
 
+## Forecast with Best Performing Model
 dataset_pred=tsf.pred_results(Dataset=data,
                               forecast_size=forecast_size_,
                               model_configs=Model_Configs,
