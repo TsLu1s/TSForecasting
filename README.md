@@ -149,7 +149,7 @@ best_Model,perf_results,predictions=tsf.pred_performance(Dataset=data,
                                                          granularity=Granularity,
                                                          eval_metric=Eval_Metric)
     
-Dataset_Pred=tsf.pred_results(Dataset=data,
+dataset_pred=tsf.pred_results(Dataset=data,
                               forecast_size=Forecast_Size,
                               model_configs=Model_Configs,
                               granularity=Granularity,
@@ -180,10 +180,10 @@ The `multivariable_lag` function creats all the past lags automatically (in acco
 
 # Feature Engineering 
     
-Dataset = tsf.engin_date(Dataset:pd.DataFrame,
+dataset = tsf.engin_date(Dataset:pd.DataFrame,
                          Drop:bool=False) 
 
-Dataset = tsf.multivariable_lag(Dataset:pd.DataFrame,
+dataset = tsf.multivariable_lag(Dataset:pd.DataFrame,
                                 target:str="y",
                                 range_lags:list=[1,10],
                                 drop_na:bool=True)
