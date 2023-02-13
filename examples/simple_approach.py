@@ -23,7 +23,7 @@ train_size_=0.9
 forecast_size_=10
 window_size_=10
 granularity_='1d' # 1m,30m,1h,1d,1wk,1mo
-list_models_=['RandomForest', 'ExtraTrees', 'GBR', 'KNN', 'GeneralizedLR', 'XGBoost','AutoArima','Prophet']#, 'AutoKeras',#H2O_AutoML 'NeuralProphet'
+list_models_=['RandomForest', 'ExtraTrees', 'GBR', 'KNN', 'GeneralizedLR', 'XGBoost','AutoArima','Prophet'] #'AutoKeras','H2O_AutoML','NeuralProphet'
 eval_metric_="MAE" # MAPE, MSE
 
 
