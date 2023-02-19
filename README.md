@@ -195,7 +195,7 @@ This `feature_selection_tb` function filters the most valuable features from the
 
 # Feature Selection 
 
-selected_Columns, selected_importance_df=tsf.feature_selection_tb(Dataset:pd.DataFrame,
+selected_columns, selected_importance_df=tsf.feature_selection_tb(Dataset:pd.DataFrame,
                                                                   target:str="y",
                                                                   total_vi:float=0.99,
                                                                   algo:str="ExtraTrees",
