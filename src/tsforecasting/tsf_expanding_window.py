@@ -253,4 +253,3 @@ def Multivariate_Forecast(Dataset:pd.DataFrame,
     df_pred['y_pred'] = df_pred['y_pred'].round(4)
 
     return df_pred
-
