@@ -22,25 +22,3 @@ def model_configurations():
                     }
     
     return model_configs
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
