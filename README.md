@@ -42,6 +42,8 @@ This process is repeated until all time series data gets segmented and it uses a
 to construct an aggregated and robust performance analysis to each predicted point.
 
 ## Where to get it <a name = "ta"></a>
+
+The source code is currently hosted on GitHub at: https://github.com/TsLu1s/TSForecasting
     
 Binary installer for the latest released version is available at the Python Package Index [(PyPI)](https://pypi.org/project/tsforecasting/).   
 
