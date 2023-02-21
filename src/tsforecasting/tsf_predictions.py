@@ -197,5 +197,3 @@ def pred_results(Dataset:pd.DataFrame,
         df_final = df_final.reset_index(drop=True)
         
     return df_final
-
-  
