@@ -106,3 +106,5 @@ def model_prediction(Train:pd.DataFrame,
         model_configs['AutoKeras']['epochs']=epochs
    
     return y_predict
+
+  
