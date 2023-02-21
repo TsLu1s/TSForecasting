@@ -1,12 +1,11 @@
 import setuptools
-# read the contents of your README file
 from pathlib import Path
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
     name="tsforecasting",
-    version="1.2.15",
+    version="1.2.40",
     description="TSForecasting is an automated time series forecasting framework",
     long_description=long_description,      
     long_description_content_type="text/markdown",
@@ -14,7 +13,6 @@ setuptools.setup(
     author="Luís Santos",
     author_email="luisf_ssantos@hotmail.com",
     license="MIT",
-    packages=setuptools.find_packages(),
     classifiers=[
         # Indicate who your project is intended for
         "Intended Audience :: Education",
@@ -33,7 +31,8 @@ setuptools.setup(
         "Programming Language :: Python :: 3.8",
     ],
     py_modules=["tsforecasting"],
-    package_dir={"": "src/tsforecasting"},  
+    packages=setuptools.find_packages(where="src"),
+    package_dir={"": "src"},  
     keywords=[
         "data science",
         "machine learning",
