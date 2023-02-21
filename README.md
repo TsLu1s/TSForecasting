@@ -5,7 +5,7 @@
   
 ## Framework Contextualization <a name = "ta"></a>
 
-The `TSForecasting` project constitutes an complete and integrated pipeline to Automate Time Series Forecasting applications through the implementation of multivariate approaches integrating regression models referring to modules such as SKLearn, H2O.ai, Autokeras and also univariate approaches of more classics methods such as Prophet, NeuralProphet and AutoArima, this following an 'Expanding Window' performance evaluation.
+The `TSForecasting` project constitutes an complete and integrated pipeline to Automate Time Series Forecasting applications through the implementation of multivariate approaches integrating regression models referring to modules such as SKLearn, H2O.ai, Autokeras and also univariate approaches of more classics methods such as Prophet and AutoArima, this following an 'Expanding Window' performance evaluation.
 
 The architecture design includes five main sections, these being: data preprocessing, feature engineering, hyperparameter optimization, forecast ensembling and forecasting method selection which are organized and customizable in a pipeline structure.
 
@@ -13,14 +13,15 @@ This project aims at providing the following application capabilities:
 
 * General applicability on tabular datasets: The developed forecasting procedures are applicable on any data table associated with any Time Series Forecasting scopes, based on DateTime and Target columns to be predicted.
 
-* Hyperparameter optimization and customization: It provides full configuration for each model hyperparameter through the customization of `Model_Configs` variable dictionary values, allowing optimal performance to be obtained.
+* Hyperparameter optimization and customization: It provides full configuration for each model hyperparameter through the customization of `model_configs` parameter variable values, allowing optimal performance to be obtained for each use case.
     
 * Robustness and improvement of predictive results: The implementation of the TSForecasting pipeline aims to improve the predictive performance directly associated with the application of the best performing forecasting method. 
    
 #### Main Development Tools <a name = "pre1"></a>
 
 Major frameworks used to built this project: 
-
+   
+* [Python](https://www.python.org/downloads)
 * [Sklearn](https://scikit-learn.org/stable/)
 * [H2O.ai](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)
 * [AutoKeras](https://autokeras.com/tutorial/structured_data_regression/)
@@ -43,7 +44,7 @@ to construct an aggregated and robust performance analysis to each predicted poi
 
 ## Where to get it <a name = "ta"></a>
 
-The source code is currently hosted on GitHub at: https://github.com/TsLu1s/TSForecasting 
+Binary installer for the latest released version is available at the Python Package Index (PyPI).   
 
 ## Installation  
 
@@ -73,19 +74,19 @@ conda install -c h2oai h2o==3.38.0.2
     
 The first needed step after importing the package is to load a dataset and define your DataTime and to be predicted Target column and rename them to 'Date' and 'y', respectively.
 The following step is to define your future running pipeline parameters variables, this being:
-* Train_size: Length of Train data in wich will be applied the first Expanding Window iteration;  
-* Forecast_Size: Full length of test/future ahead predictions;
-* Window_Size: Length of sliding window, Window_Size>=Forecast_Size is recommended;
-* Granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
-* Eval_Metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
+* train_size: Length of Train data in which will be applied the first Expanding Window iteration;  
+* forecast_size: Full length of test/future ahead predictions;
+* window_size: Length of sliding window, Window_Size>=Forecast_Size is recommended;
+* granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
+* eval_metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
 (Mean Squared Error);
-* List_Models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoKeras',
-              'AutoArima','Prophet','NeuralProphet'];
-* Model_Configs: Nested dictionary in wich are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit; 
+* list_models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoKeras',
+              'AutoArima','Prophet'];
+* model_configs: Nested dictionary in which are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit (customization example shown bellow); 
  
-The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `best_model`[String] (most effective model), `perf_results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `predictions`[DataFrame] containing every segmented window iteration performed wich can be use for analysis and objective models comparison. 
+The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `best_model`[String] (most effective model), `perf_results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `predictions`[DataFrame] containing every segmented window iteration performed which can be use for analysis and objective models comparison. 
 
-The `pred_results` function forecasts the future values based on the previously predefined parameters and the `selected model` wich specifies the choosen model used to obtain future predictions.
+The `pred_results` function forecasts the future values based on the previously predefined parameters and the `selected model` which specifies the choosen model used to obtain future predictions.
     
 Importante Note:
 
@@ -96,6 +97,8 @@ Importante Note:
 
 import tsforecasting as tsf
 import pandas as pd
+import warnings
+warnings.filterwarnings("ignore", category=Warning) #-> For a clean console
 import h2o
 
 h2o.init() # -> Run only if using H2O_AutoML models   
@@ -110,47 +113,31 @@ forecast_size_=15
 window_size_=Forecast_Size # Recommended
 granularity_='1d' # 1m,30m,1h,1d,1wk,1mo
 eval_metric_="MAE" # MAPE, MSE
-list_models_=['RandomForest','ExtraTrees','KNN','XGBoost','AutoArima'] # ensemble example
-Model_Configs ={'RandomForest':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
-                   'max_depth':None,'max_features':"auto"},
-               'ExtraTrees':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
-                   'max_depth':None,'max_features':"auto"}, 
-               'GBR':{'n_estimators':250,'learning_rate':0.1,'criterion':"friedman_mse",
-                    'max_depth':3,'min_samples_split':5,'learning_rate':0.01,'loss':'ls'},
-               'KNN':{'n_neighbors': 3,'weights':"uniform",'algorithm':"auto",'metric_params':None},
-               'GeneralizedLR':{'power':1,'alpha':0.5,'link':'log','fit_intercept':True,
-                    'max_iter':100,'warm_start':False,'verbose':0},
-               'XGBoost':{'objective':'reg:squarederror','n_estimators':1000,'nthread':24},
-               'H2O_AutoML':{'max_models':50,'nfolds':0,'seed':1,'max_runtime_secs':30,
-                    'sort_metric':'AUTO','exclude_algos':['GBM','DeepLearning']},
-               'AutoKeras':{'max_trials':1,'overwrite':42,'loss':"mean_squared_error",
-                    'max_model_size':None,'epochs':50},
-               'AutoArima':{'start_p':0, 'd':1, 'start_q':0,'max_p':3, 'max_d':3, 'max_q':3,
-                    'start_P':0, 'D':1, 'start_Q':0, 'max_P':3, 'max_D':3,'max_Q':3,
-                    'm':1,'trace':True, 'seasonal':True,'random_state':20,'n_fits':10},
-               'Prophet':{'growth':'linear','changepoint_range':0.8,'yearly_seasonality':'auto',
-                    'weekly_seasonality':'auto','daily_seasonality':'auto',},
-               'NeuralProphet':{'growth':'linear','n_lags':0,'yearly_seasonality':'auto',
-                    'weekly_seasonality':'auto','daily_seasonality':'auto','n_forecasts':1,
-                    'epochs':None,'num_hidden_layers':0,'loss_func':"Huber",'optimizer':"AdamW"}
-                }
+list_models_=['RandomForest','ExtraTrees','KNN','XGBoost','AutoArima'] # Ensemble Example
+    
+## Get models hyperparameters configurations
+    
+models_hparameters=tsf.model_configurations()
+print(models_hparameters)
 
+# Customization Example
+models_hparameters["RandomForest"]["n_estimators"]=100
+models_hparameters["ExtraTrees"]["n_estimators"]=100
+models_hparameters["GBR"]["n_estimators"]=100
 
-#import warnings
-#warnings.filterwarnings("ignore", category=Warning) #-> For a clean console
-
+## Performance Evaluation
 best_model,perf_results,predictions=tsf.pred_performance(Dataset=data,
                                                          train_size=train_size_,
                                                          forecast_size=forecast_size_,
                                                          window_size=window_size_,
                                                          list_models=list_models_,
-                                                         model_configs=Model_Configs,
+                                                         model_configs=models_hparameters,
                                                          granularity=granularity_,
                                                          eval_metric=eval_metric_)
-    
+## Forecast
 dataset_pred=tsf.pred_results(Dataset=data,
                               forecast_size=forecast_size_,
-                              model_configs=Model_Configs,
+                              model_configs=models_hparameters,
                               granularity=granularity_,
                               selected_model=best_model)
 ```  
@@ -166,7 +153,7 @@ The `model_prediction` function predicts your Test target column based on the in
 y_predict = tsf.model_prediction(Train:pd.DataFrame,
                                  Test:pd.DataFrame,
                                  target:str="y",
-                                 model_configs:dict=Model_Configs,
+                                 model_configs:dict=models_hparameters,
                                  algo:str='RandomForest')
 ```       
     
@@ -219,6 +206,6 @@ Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSFor
 
 ## Contact 
  
-Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
+Luís Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
     
 Feel free to contact me and share your feedback.
