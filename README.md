@@ -20,8 +20,7 @@ This project aims at providing the following application capabilities:
 #### Main Development Tools <a name = "pre1"></a>
 
 Major frameworks used to built this project: 
-   
-* [Python](https://www.python.org/downloads)
+
 * [Sklearn](https://scikit-learn.org/stable/)
 * [H2O.ai](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)
 * [AutoKeras](https://autokeras.com/tutorial/structured_data_regression/)
