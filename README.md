@@ -5,7 +5,7 @@
   
 ## Framework Contextualization <a name = "ta"></a>
 
-The `TSForecasting` project constitutes an complete and integrated pipeline to Automate Time Series Forecasting applications through the implementation of multivariate approaches integrating regression models referring to modules such as SKLearn, H2O.ai, Autokeras and also univariate approaches of more classics methods such as Prophet and AutoArima, this following an 'Expanding Window' performance evaluation.
+The `TSForecasting` project constitutes an complete and integrated pipeline to Automate Time Series Forecasting applications through the implementation of multivariate approaches integrating regression models referring to modules such as SKLearn, H2O.ai, XGBoost and also univariate approaches of more classics methods such as Prophet and AutoArima, this following an 'Expanding Window' performance evaluation.
 
 The architecture design includes five main sections, these being: data preprocessing, feature engineering, hyperparameter optimization, forecast ensembling and forecasting method selection which are organized and customizable in a pipeline structure.
 
@@ -23,7 +23,7 @@ Major frameworks used to built this project:
 
 * [Sklearn](https://scikit-learn.org/stable/)
 * [H2O.ai](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)
-* [AutoKeras](https://autokeras.com/tutorial/structured_data_regression/)
+* [XGBoost](https://xgboost.readthedocs.io/en/stable/)
 * [AutoArima](https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html)
 * [Prophet](https://facebook.github.io/prophet/docs/quick_start.html#python-api)
     
@@ -79,11 +79,11 @@ The following step is to define your future running pipeline parameters variable
 * granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
 * eval_metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
 (Mean Squared Error);
-* list_models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoKeras',
-              'AutoArima','Prophet'];
+* list_models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML',
+    'AutoArima','Prophet'];
 * model_configs: Nested dictionary in which are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit (customization example shown bellow); 
  
-The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `best_model`[String] (most effective model), `perf_results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `predictions`[DataFrame] containing every segmented window iteration performed which can be use for analysis and objective models comparison. 
+The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `best_model`(most effective model), `perf_results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `predictions`[DataFrame] containing every segmented window iteration performed which can be use for analysis and objective models comparison. 
 
 The `pred_results` function forecasts the future values based on the previously predefined parameters and the `selected model` which specifies the choosen model used to obtain future predictions.
     
@@ -205,6 +205,6 @@ Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSFor
 
 ## Contact 
  
-Luís Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
+Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
     
 Feel free to contact me and share your feedback.
