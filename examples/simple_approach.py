@@ -31,7 +31,6 @@ eval_metric_="MAE" # MAPE, MSE
 models_hparameters=tsf.model_configurations()
 models_hparameters["RandomForest"]["n_estimators"]=100
 models_hparameters["ExtraTrees"]["n_estimators"]=100
-models_hparameters["GBR"]["loss"]='absolute_error'
 
 ## Forecast Model Ensemble Evalution
 best_model,perf_results,predictions=tsf.pred_performance(Dataset=data, 
