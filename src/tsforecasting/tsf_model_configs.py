@@ -5,7 +5,7 @@ def model_configurations():
                    'ExtraTrees':{'n_estimators':250,'random_state':42,'criterion':"squared_error",
                        'max_depth':None,'max_features':"auto"}, 
                    'GBR':{'n_estimators':250,'learning_rate':0.1,'criterion':"friedman_mse",
-                        'max_depth':3,'min_samples_split':5,'learning_rate':0.01,'loss':'ls'},
+                        'max_depth':3,'min_samples_split':5,'learning_rate':0.01,'loss':'squared_error'},
                    'KNN':{'n_neighbors': 3,'weights':"uniform",'algorithm':"auto",'metric_params':None},
                    'GeneralizedLR':{'power':1,'alpha':0.5,'link':'log','fit_intercept':True,
                         'max_iter':100,'warm_start':False,'verbose':0},
