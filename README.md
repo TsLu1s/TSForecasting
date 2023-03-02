@@ -122,7 +122,6 @@ print(models_hparameters)
 # Customization Example
 models_hparameters["RandomForest"]["n_estimators"]=100
 models_hparameters["ExtraTrees"]["n_estimators"]=100
-models_hparameters["GBR"]["n_estimators"]=100
 
 ## Performance Evaluation
 best_model,perf_results,predictions=tsf.pred_performance(Dataset=data,
