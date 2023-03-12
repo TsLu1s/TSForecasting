@@ -3,7 +3,7 @@ import numpy as np
 import sys
 import datetime
 from sklearn.preprocessing import MinMaxScaler
-from fbprophet import Prophet
+from prophet import Prophet
 from pmdarima.arima import auto_arima
 from .tsf_model_selection import model_prediction
 from .tsf_data_eng import slice_timestamp, engin_date, multivariable_lag
