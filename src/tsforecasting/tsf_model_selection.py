@@ -72,7 +72,7 @@ def model_prediction(Train:pd.DataFrame,
         
     elif algo=='H2O_AutoML':
         Test[target]=Test[target].fillna(0) ## Avoid H2O OS_Error
-        Test[target]=Test[target].astype(np.float) ## Avoid H2O OS_Error
+        Test[target]=Test[target].astype(float) ## Avoid H2O OS_Error
         Train_h2o,Test_h2o=h2o.H2OFrame(Train),h2o.H2OFrame(Test)
         input_cols=sel_cols.copy()
         input_cols.remove("y")
