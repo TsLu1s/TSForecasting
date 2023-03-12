@@ -5,7 +5,7 @@ import datetime
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from sklearn.preprocessing import MinMaxScaler
-from fbprophet import Prophet
+from prophet import Prophet
 from pmdarima.arima import auto_arima
 from .tsf_data_eng import slice_timestamp, round_cols, engin_date, multivariable_lag
 from .tsf_model_selection import model_prediction
