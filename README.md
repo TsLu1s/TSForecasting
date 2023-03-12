@@ -53,20 +53,6 @@ To install this package from Pypi repository run the following command:
 pip install tsforecasting
 ```
 
-In order to avoid installation issues `fbprophet` and `h2o` modules should be downloaded separately by running the following commands:
-
-```
-## Option 1
-pip install pystan==2.19.1.1
-pip install fbprophet==0.7.1
-## Option 2
-conda install -c conda-forge fbprophet==0.7.1
-``` 
-    
-```
-conda install -c h2oai h2o==3.38.0.2
-```
-
 # Usage Examples
     
 ## 1. TSForecasting - Automated Time Series Forecasting
@@ -79,8 +65,8 @@ The following step is to define your future running pipeline parameters variable
 * granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
 * eval_metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
 (Mean Squared Error);
-* list_models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR','KNN','GeneralizedLR','XGBoost','H2O_AutoML',
-    'AutoArima','Prophet'];
+* list_models: Select all the models intented do run in `pred_performance` function. To compare predictive performance of all available models set paramater `list_models`=['RandomForest','ExtraTrees','GBR',
+'KNN','GeneralizedLR','XGBoost','H2O_AutoML','AutoArima','Prophet'];
 * model_configs: Nested dictionary in which are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit (customization example shown bellow); 
  
 The `pred_performance` function compares all segmented windows values (predicted and real) for each selected and configurated model then calculates it's predicted performance error metrics, returning the variable `best_model`(most effective model), `perf_results`[DataFrame] containing every detailed measure of each Test predicted value and at last the variable `predictions`[DataFrame] containing every segmented window iteration performed which can be use for analysis and objective models comparison. 
@@ -196,7 +182,6 @@ You can analyse the obtained performance results by using the `metrics_regressio
 reg_performance = pd.DataFrame(tsf.metrics_regression(y_true,y_pred),index=[0])    # y_true:list, y_pred:list
         
 ```
-
     
 ## License
 
