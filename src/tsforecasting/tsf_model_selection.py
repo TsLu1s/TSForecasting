@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, GradientBoostingRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.linear_model import TweedieRegressor
-from fbprophet import Prophet
+from prophet import Prophet
 from pmdarima.arima import auto_arima
 import xgboost
 import h2o
