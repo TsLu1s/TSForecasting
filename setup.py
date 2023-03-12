@@ -5,7 +5,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
     name="tsforecasting",
-    version="1.2.46",
+    version="1.2.50",
     description="TSForecasting is an automated time series forecasting framework",
     long_description=long_description,      
     long_description_content_type="text/markdown",
