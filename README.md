@@ -95,7 +95,7 @@ data=data[['Date',"y"]]
     
 train_size_=0.95
 forecast_size_=15
-window_size_=Forecast_Size # Recommended
+window_size_=forecast_size_ # Recommended
 granularity_='1d' # 1m,30m,1h,1d,1wk,1mo
 eval_metric_="MAE" # MAPE, MSE
 list_models_=['RandomForest','ExtraTrees','KNN','XGBoost','AutoArima'] # Ensemble Example
