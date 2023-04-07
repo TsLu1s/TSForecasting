@@ -128,7 +128,7 @@ dataset_pred=tsf.pred_results(Dataset=data,
 
 ## 2. TSForecasting - Extra Auxiliar Functions
 
-The `model_prediction` function predicts your Test target column based on the input DataFrames, Train and Test, model configuration set by the parameter `model_configs` and the selected running algorithm in the parameter `algo` (default='RandomForest'). Note, you can select and customize any of the 11 models available in `Model_Configs` dictionary.
+The `model_prediction` function predicts your Test target column based on the input DataFrames, Train and Test, model configuration set by the parameter `model_configs` and the selected running algorithm in the parameter `algo` (default='RandomForest'). Note, you can select and customize any of the 8 models available in `Model_Configs` dictionary.
     
 ```py     
  
