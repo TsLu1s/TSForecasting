@@ -61,7 +61,7 @@ The first needed step after importing the package is to load a dataset and defin
 The following step is to define your future running pipeline parameters variables, this being:
 * train_size: Length of Train data in which will be applied the first Expanding Window iteration;  
 * forecast_size: Full length of test/future ahead predictions;
-* window_size: Length of sliding window, Window_Size>=Forecast_Size is recommended;
+* window_size: Length of sliding window, window_size>=forecast_size is suggested;
 * granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
 * eval_metric: Default predictive evaluation metric (eval_metric) is "MAE" (Mean Absolute Error), other options are "MAPE" (Mean Absolute Percentage Error) and "MSE"
 (Mean Squared Error);
@@ -110,7 +110,7 @@ models_hparameters["RandomForest"]["n_estimators"]=100
 models_hparameters["ExtraTrees"]["n_estimators"]=100
 
 ## Performance Evaluation
-best_model,perf_results,predictions=tsf.pred_performance(Dataset=data,
+best_model,perf_results,predictions=tsf.pred_performance(dataset=data,
                                                          train_size=train_size_,
                                                          forecast_size=forecast_size_,
                                                          window_size=window_size_,
@@ -119,7 +119,7 @@ best_model,perf_results,predictions=tsf.pred_performance(Dataset=data,
                                                          granularity=granularity_,
                                                          eval_metric=eval_metric_)
 ## Forecast
-dataset_pred=tsf.pred_results(Dataset=data,
+dataset_pred=tsf.pred_results(dataset=data,
                               forecast_size=forecast_size_,
                               model_configs=models_hparameters,
                               granularity=granularity_,
@@ -127,20 +127,6 @@ dataset_pred=tsf.pred_results(Dataset=data,
 ```  
 
 ## 2. TSForecasting - Extra Auxiliar Functions
-
-The `model_prediction` function predicts your Test target column based on the input DataFrames, Train and Test, model configuration set by the parameter `model_configs` and the selected running algorithm in the parameter `algo` (default='RandomForest'). Note, you can select and customize any of the 8 models available in `Model_Configs` dictionary.
-    
-```py     
- 
-# Automated Model Predictions
- 
-y_predict = tsf.model_prediction(Train:pd.DataFrame,
-                                 Test:pd.DataFrame,
-                                 target:str="y",
-                                 model_configs:dict=models_hparameters,
-                                 algo:str='RandomForest')
-```       
-    
     
 The `engin_date` function converts and transforms columns of Datetime type into additional columns (Year, Day of the  Year, Season, Month, Day of the month, Day of the week, Weekend, Hour, Minute) which will be added by association to the input dataset and subsequently deletes the original column if variable Drop=True.
 
@@ -150,10 +136,10 @@ The `multivariable_lag` function creats all the past lags automatically (in acco
 
 # Feature Engineering 
     
-dataset = tsf.engin_date(Dataset:pd.DataFrame,
-                         Drop:bool=False) 
+dataset = tsf.engin_date(dataset:pd.DataFrame,
+                         drop:bool=False) 
 
-dataset = tsf.multivariable_lag(Dataset:pd.DataFrame,
+dataset = tsf.multivariable_lag(dataset:pd.DataFrame,
                                 target:str="y",
                                 range_lags:list=[1,10],
                                 drop_na:bool=True)
@@ -166,22 +152,13 @@ This `feature_selection_tb` function filters the most valuable features from the
 
 # Feature Selection 
 
-selected_columns, selected_importance_df=tsf.feature_selection_tb(Dataset:pd.DataFrame,
+selected_columns, selected_importance_df=tsf.feature_selection_tb(dataset:pd.DataFrame,
                                                                   target:str="y",
                                                                   total_vi:float=0.99,
                                                                   algo:str="ExtraTrees",
                                                                   estimators:int=250)
  ```   
     
-You can analyse the obtained performance results by using the `metrics_regression` function wich contains the most used metrics for regression predictive contexts.
-    
-```py  
- 
-# Regression Performance Metrics
-
-reg_performance = pd.DataFrame(tsf.metrics_regression(y_true,y_pred),index=[0])    # y_true:list, y_pred:list
-        
-```
     
 ## License
 
@@ -192,3 +169,4 @@ Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSFor
 Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
     
 Feel free to contact me and share your feedback.
+
