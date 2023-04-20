@@ -230,8 +230,6 @@ def Multivariate_Forecast(dataset:pd.DataFrame,
             y_true = pd.Series(y_true)
             y_true_list = y_true.tolist()
             
-            y_t_axys=list(test.index[0:forecast_length])
-            
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
             x,y=pd.concat(list_y_true),pd.concat(list_y_pred) 
