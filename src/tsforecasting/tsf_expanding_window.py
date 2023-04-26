@@ -74,8 +74,6 @@ def Univariate_Forecast(dataset:pd.DataFrame,
             print('Rows Train:', len(train))
             
             print('Rows Test:', len(test))
-
-            train[[target]]=train[[target]].astype('int32')
             
             train_=train.copy()
             train_=train_[['ds', target]]
