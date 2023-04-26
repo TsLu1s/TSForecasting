@@ -45,12 +45,6 @@ def Univariate_Forecast(dataset:pd.DataFrame,
     
     size_train=int((train_length*len(df_final)))
     
-    train=df_final.iloc[:size_train,:]
-    test=df_final.iloc[size_train:,:]
-    
-    train[target]=train[target].astype(np.int64)
-    test[target]=test[target].astype(np.int64)
-    
     assert len(test)>=forecast_length , "forecast_length>=len(Test), try to reduce your train_size ratio"
     
     iterations,iters = (int((len(test))/rolling_window_size)),(int((len(test)-forecast_length)/rolling_window_size))+1
@@ -71,6 +65,7 @@ def Univariate_Forecast(dataset:pd.DataFrame,
         
         train=df_final.iloc[:size_train,:]
         test=df_final.iloc[size_train:,:]
+        train[target],test[target]=train[target].astype(np.int64),test[target].astype(np.int64)
         
         if len(test[target])>=forecast_length:
             
