@@ -45,6 +45,12 @@ def Univariate_Forecast(dataset:pd.DataFrame,
     
     size_train=int((train_length*len(df_final)))
     
+    train=df_final.iloc[:size_train,:]
+    test=df_final.iloc[size_train:,:]
+    
+    train[target]=train[target].astype(np.int64)
+    test[target]=test[target].astype(np.int64)
+    
     assert len(test)>=forecast_length , "forecast_length>=len(Test), try to reduce your train_size ratio"
     
     iterations,iters = (int((len(test))/rolling_window_size)),(int((len(test)-forecast_length)/rolling_window_size))+1
@@ -65,7 +71,6 @@ def Univariate_Forecast(dataset:pd.DataFrame,
         
         train=df_final.iloc[:size_train,:]
         test=df_final.iloc[size_train:,:]
-        train[target],test[target]=train[target].astype(np.int64),test[target].astype(np.int64)
         
         if len(test[target])>=forecast_length:
             
@@ -74,6 +79,8 @@ def Univariate_Forecast(dataset:pd.DataFrame,
             print('Rows Train:', len(train))
             
             print('Rows Test:', len(test))
+
+            train[[target]]=train[[target]].astype('int32')
             
             train_=train.copy()
             train_=train_[['ds', target]]
@@ -113,7 +120,7 @@ def Univariate_Forecast(dataset:pd.DataFrame,
             y_pred=y_pred[col]
                         
             y_true=test[target][0:forecast_length]
-            
+
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
             x,y=pd.concat(list_y_true),pd.concat(list_y_pred) 
@@ -214,6 +221,7 @@ def Multivariate_Forecast(dataset:pd.DataFrame,
             y_pred=model_prediction(train, test,target,model_configs=model_configs,algo=algo)
             y_pred=y_pred[0:forecast_length]
             y_pred= pd.Series(y_pred.tolist())
+            y_pred_list = y_pred.tolist()
             
             y_true=test[target][0:forecast_length]
             y_true = pd.Series(y_true)
