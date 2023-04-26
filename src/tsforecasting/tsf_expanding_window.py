@@ -121,9 +121,6 @@ def Univariate_Forecast(dataset:pd.DataFrame,
                         
             y_true=test[target][0:forecast_length]
             
-            y_pred_list = y_pred.tolist()
-            y_true_list = y_true.tolist()
-
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
             x,y=pd.concat(list_y_true),pd.concat(list_y_pred) 
@@ -224,11 +221,9 @@ def Multivariate_Forecast(dataset:pd.DataFrame,
             y_pred=model_prediction(train, test,target,model_configs=model_configs,algo=algo)
             y_pred=y_pred[0:forecast_length]
             y_pred= pd.Series(y_pred.tolist())
-            y_pred_list = y_pred.tolist()
             
             y_true=test[target][0:forecast_length]
             y_true = pd.Series(y_true)
-            y_true_list = y_true.tolist()
             
             list_y_true.append(y_true)
             list_y_pred.append(y_pred)
