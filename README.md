@@ -167,6 +167,3 @@ Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSFor
 ## Contact 
  
 Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
-    
-Feel free to contact me and share your feedback.
-
