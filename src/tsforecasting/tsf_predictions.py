@@ -4,7 +4,7 @@ import sys
 import datetime
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from prophet import Prophet
 from pmdarima.arima import auto_arima
 from .tsf_data_eng import slice_timestamp, round_cols, engin_date, multivariable_lag
@@ -177,7 +177,7 @@ def pred_results(dataset:pd.DataFrame,
         input_cols=list(df_final.columns)
         input_cols.remove(target)  
         
-        scaler = MinMaxScaler()
+        scaler = StandardScaler()
         scaler = scaler.fit(train[input_cols])
         
         train[input_cols] = scaler.transform(train[input_cols])
