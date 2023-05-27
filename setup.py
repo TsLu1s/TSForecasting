@@ -5,7 +5,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
     name="tsforecasting",
-    version="1.2.60",
+    version="1.2.65",
     description="TSForecasting is an automated time series forecasting framework",
     long_description=long_description,      
     long_description_content_type="text/markdown",
@@ -27,7 +27,6 @@ setuptools.setup(
 
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
     py_modules=["tsforecasting"],
