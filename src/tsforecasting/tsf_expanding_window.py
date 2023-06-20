@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 import datetime
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from prophet import Prophet
 from pmdarima.arima import auto_arima
 from .tsf_model_selection import model_prediction
@@ -212,7 +212,7 @@ def Multivariate_Forecast(dataset:pd.DataFrame,
             input_cols=list(train.columns)
             input_cols.remove(target)
 
-            scaler = MinMaxScaler() 
+            scaler = StandardScaler() 
 
             scaler = scaler.fit(train[input_cols])
             train[input_cols] = scaler.transform(train[input_cols])
