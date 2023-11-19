@@ -23,6 +23,8 @@ print(parameters)
 
 # Customization Hyperparameters Settings
 parameters["RandomForest"]["n_estimators"] = 200
+parameters["RandomForest"]["max_features"] = 'log2'
+parameters["ExtraTrees"]["max_features"] = 'log2'
 parameters["KNN"]["n_neighbors"] = 5
 parameters["H2O_AutoML"]["max_runtime_secs"] = 45
 
