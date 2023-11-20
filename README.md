@@ -61,7 +61,7 @@ The following step is to define your future running pipeline parameters variable
 * train_size: Length of Train data in which will be applied the first Expanding Window iteration;  
 * forecast_size: Full length of test/future ahead predictions;
 * sliding_size: Length of sliding window, sliding_size>=forecast_size is suggested;
-* models: Select all the models intented do ensemble to evaluation. To fit and compare predictive performance of available models set them in paramater `models:list`, options are the following:
+* models: Select all the models intented to ensemble to evaluation. To fit and compare predictive performance of available models set them in paramater `models:list`, options are the following:
   * `RandomForest`
   * `ExtraTrees`
   * `GBR`
@@ -73,7 +73,7 @@ The following step is to define your future running pipeline parameters variable
   * `Prophet`
 * hparameters: Nested dictionary in which are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit (customization example shown bellow); 
 * granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
-* eval_metric: Default predictive evaluation metric (eval_metric) is `MAE` (Mean Absolute Error), other options are `MAPE` (Mean Absolute Percentage Error) and `MSE`
+* eval_metric: Default predictive evaluation metric is `MAE` (Mean Absolute Error), other options are `MAPE` (Mean Absolute Percentage Error) and `MSE`
 (Mean Squared Error);
  
 The `fit_forecast` method set the default parameters for fitting and comparison of all segmented windows for each selected and configurated model. After implementation, the `history` method agregates the returning variables `fit_performance` containing every detailed measure of each `window` iteration predicted value and `fit_predictions` measuring all segmented `window` iterations performance.

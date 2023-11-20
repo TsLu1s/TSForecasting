@@ -2,9 +2,9 @@ def model_configurations():
     
     hparameters = {
         'RandomForest': {'n_estimators': 250, 'random_state': 42, 'criterion': 'squared_error',
-                         'max_depth': None, 'max_features': 'auto'},
+                         'max_depth': None},
         'ExtraTrees': {'n_estimators': 250, 'random_state': 42, 'criterion': 'squared_error',
-                       'max_depth': None, 'max_features': 'auto'},
+                       'max_depth': None},
         'GBR': {'n_estimators': 250, 'learning_rate': 0.1, 'criterion': 'friedman_mse',
                 'max_depth': 3, 'min_samples_split': 5, 'loss': 'squared_error'},
         'KNN': {'n_neighbors': 3, 'weights': 'uniform', 'algorithm': 'auto', 'metric_params': None},
