@@ -73,7 +73,7 @@ The following step is to define your future running pipeline parameters variable
   * `Prophet`
 * hparameters: Nested dictionary in which are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit (customization example shown bellow); 
 * granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
-* eval_metric: Default predictive evaluation metric is `MAE` (Mean Absolute Error), other options are `MAPE` (Mean Absolute Percentage Error) and `MSE`
+* metric: Default predictive evaluation metric is `MAE` (Mean Absolute Error), other options are `MAPE` (Mean Absolute Percentage Error) and `MSE`
 (Mean Squared Error);
  
 The `fit_forecast` method set the default parameters for fitting and comparison of all segmented windows for each selected and configurated model. After implementation, the `history` method agregates the returning variables `fit_performance` containing every detailed measure of each `window` iteration predicted value and `fit_predictions` measuring all segmented `window` iterations performance.
