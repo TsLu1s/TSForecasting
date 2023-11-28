@@ -100,7 +100,7 @@ data = data[['Date',"y"]]
 parameters = model_configurations()
 print(parameters)
 
-# Customization Hyperparameters Settings
+# Customization Hyperparameters Example
 parameters["RandomForest"]["n_estimators"] = 200
 parameters["KNN"]["n_neighbors"] = 5
 parameters["Prophet"]["seasonality_mode"] = 'multiplicative'
@@ -136,7 +136,7 @@ The `multivariable_lag` method creats all the past lags related to the target `y
 
 # Feature Engineering 
 
-from TSForecasting_imports.treatment import Treatment
+from tsforecasting.treatment import Treatment
 
 tr = Treatment()
 
