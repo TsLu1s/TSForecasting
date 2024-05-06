@@ -16,7 +16,7 @@ data=data[['Date',"y"]]
 
 ## Get models hyperparameters configurations
 hparameters = model_configurations()
-print(parameters)
+print(hparameters)
 
 # Customization Hyperparameters Settings
 hparameters["RandomForest"]["n_estimators"] = 20
