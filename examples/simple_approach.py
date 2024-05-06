@@ -1,11 +1,8 @@
-from tsforecasting.forecasting import TSForecasting
-from tsforecasting.parameters import model_configurations
+from tsforecasting.forecasting import (TSForecasting, 
+                                       model_configurations)
 import pandas as pd
-import h2o
 import warnings
 warnings.filterwarnings("ignore",category=Warning)
-
-h2o.init() # -> Run only if using H2O_AutoML models   
 
 #source_data="https://www.kaggle.com/datasets/kandij/electric-production"
 
