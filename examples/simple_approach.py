@@ -18,32 +18,33 @@ data = data.rename(columns={'DATE': 'Date','Value':'y'})
 data=data[['Date',"y"]]
 
 ## Get models hyperparameters configurations
-parameters = model_configurations()
+hparameters = model_configurations()
 print(parameters)
 
 # Customization Hyperparameters Settings
-parameters["RandomForest"]["n_estimators"] = 200
-parameters["RandomForest"]["max_features"] = 'log2'
-parameters["ExtraTrees"]["max_features"] = 'log2'
-parameters["KNN"]["n_neighbors"] = 5
-parameters["H2O_AutoML"]["max_runtime_secs"] = 45
+hparameters["RandomForest"]["n_estimators"] = 20
+hparameters["KNN"]["n_neighbors"] = 5
+hparameters["Catboost"]["iterations"] = 150
+hparameters["AutoGluon"]["time_limit"] = 50
+
+#from forecasting import TSForecasting
 
 ## Fit Forecasting Evaluation
 tsf = TSForecasting(train_size = 0.865,
-                    forecast_size = 10,
+                    lags = 10,
+                    horizon = 5,
                     sliding_size = 10,
-                    models = ['RandomForest','ExtraTrees', 'GBR', 'KNN', 'GeneralizedLR',
-                              'XGBoost', 'AutoArima','Prophet','H2O_AutoML'],
-                    hparameters = parameters,
-                    granularity = "1mo", # 1m,30m,1h,1d,1wk,1mo
-                    metric = "MAE"      # MAPE, MSE
-                    )
+                    models = ['RandomForest', 'GeneralizedLR', 'GBR', 'KNN', 'GeneralizedLR',
+                              'XGBoost', 'LightGBM', 'Catboost', 'AutoGluon'],
+                    hparameters = hparameters,
+                    granularity = '1mo',
+                    metric = 'MAE'
+                   )
 
-tsf = tsf.fit_forecast(dataset = data)
+tsf.fit_forecast(dataset = data)
 
 # Get Fit History
-fit_predictions, fit_performance = tsf.history()
+fit_performance = tsf.history()
 
 ## Forecast
 forecast = tsf.forecast()
-
