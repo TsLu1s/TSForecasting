@@ -5,7 +5,7 @@
   
 ## Framework Contextualization <a name = "ta"></a>
 
-The `TSForecasting` project constitutes an complete and integrated pipeline to Automate Time Series Forecasting applications through the implementation of multivariate approaches integrating regression models referring to modules such as `SKLearn`, `H2O.ai`, `XGBoost` and also univariate approaches of more classics methods such as `Prophet` and `AutoArima`, this following an 'Expanding Window' performance evaluation.
+The `TSForecasting` project offers a comprehensive and integrated pipeline designed to Automate Time Series Forecasting applications. By implementing multivariate approaches that incorporate multiple regression models, it combines multiple relevant modules such as `SKLearn`, `AutoGluon`, `CatBoost` and `XGBoost`, following an `Expanding Window` structured approach for performance evaluation ensuring a robust, scalable and optimized forecasting solution.
 
 The architecture design includes five main sections, these being: data preprocessing, feature engineering, hyperparameter optimization, forecast ensembling and forecasting method selection which are organized and customizable in a pipeline structure.
 
@@ -22,10 +22,11 @@ This project aims at providing the following application capabilities:
 Major frameworks used to built this project: 
 
 * [Sklearn](https://scikit-learn.org/stable/)
-* [H2O.ai](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)
+* [AutoGluon](https://auto.gluon.ai/stable/index.html)
+* [CatBoost](https://catboost.ai/)
 * [XGBoost](https://xgboost.readthedocs.io/en/stable/)
-* [AutoArima](https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html)
-* [Prophet](https://facebook.github.io/prophet/docs/quick_start.html#python-api)
+* [LightGBM](https://lightgbm.readthedocs.io/en/latest/Installation-Guide.html)
+
     
 ## Performance Evaluation Structure <a name = "ta"></a>
 
@@ -58,38 +59,37 @@ pip install tsforecasting
     
 The first needed step after importing the package is to load a dataset and define your DataTime (`datetime64[ns]` type) and Target column to be predicted, then rename them to `Date` and `y`, respectively.
 The following step is to define your future running pipeline parameters variables, these being:
-* train_size: Length of Train data in which will be applied the first Expanding Window iteration;  
-* forecast_size: Full length of test/future ahead predictions;
-* sliding_size: Length of sliding window, sliding_size>=forecast_size is suggested;
-* models: Select all the models intented to ensemble to evaluation. To fit and compare predictive performance of available models set them in paramater `models:list`, options are the following:
+* train_size: Length of Train data in which will be applied the first Expanding Window iteration;
+* lags: The number of time steps in each window, indicating how many past observations each input sample includes;
+* horizon: Full length of test/future ahead predictions;
+* sliding_size: Length of sliding window, sliding_size>=horizon is suggested;
+* models: All selected models intented to be ensembled for evaluation. To fit and compare predictive performance of available models set them in paramater `models:list`, options are the following:
   * `RandomForest`
   * `ExtraTrees`
   * `GBR`
   * `KNN`
   * `GeneralizedLR`
   * `XGBoost`
-  * `H2O_AutoML`
-  * `AutoArima`
-  * `Prophet`
+  * `LightGBM`
+  * `Catboost`
+  * `AutoGluon`
+
 * hparameters: Nested dictionary in which are contained all models and specific hyperparameters configurations. Feel free to customize each model as you see fit (customization example shown bellow); 
 * granularity: Valid interval of periods correlated to data -> 1m,30m,1h,1d,1wk,1mo (default='1d');
 * metric: Default predictive evaluation metric is `MAE` (Mean Absolute Error), other options are `MAPE` (Mean Absolute Percentage Error) and `MSE`
 (Mean Squared Error);
  
-The `fit_forecast` method set the default parameters for fitting and comparison of all segmented windows for each selected and configurated model. After implementation, the `history` method agregates the returning variables `fit_performance` containing every detailed measure of each `window` iteration predicted value and `fit_predictions` measuring all segmented `window` iterations performance.
+The `fit_forecast` method set the default parameters for fitting and comparison of all segmented windows for each selected and configurated model. After implementation, the `history` method agregates the returning the variable `fit_performance` containing the detailed measures of each window iteration forecasted value and all segmented iterations performance.
 
 The `forecast` method forecasts the future values based on the previously predefined best performing model.
         
 ```py
 
-from tsforecasting.forecasting import TSForecasting
-from tsforecasting.parameters import model_configurations
+from tsforecasting.forecasting import (TSForecasting,
+                                       model_configurations)
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=Warning) #-> For a clean console
-import h2o
-
-h2o.init() # -> Run only if using H2O_AutoML models   
 
 ## Dataframe Loading
 data = pd.read_csv('csv_directory_path') 
@@ -101,25 +101,26 @@ parameters = model_configurations()
 print(parameters)
 
 # Customization Hyperparameters Example
-parameters["RandomForest"]["n_estimators"] = 200
-parameters["KNN"]["n_neighbors"] = 5
-parameters["Prophet"]["seasonality_mode"] = 'multiplicative'
-parameters["H2O_AutoML"]["max_runtime_secs"] = 90
+hparameters["RandomForest"]["n_estimators"] = 50
+hparameters["KNN"]["n_neighbors"] = 5
+hparameters["Catboost"]["iterations"] = 150
+hparameters["AutoGluon"]["time_limit"] = 50
 
 ## Fit Forecasting Evaluation
-tsf = TSForecasting(train_size = 0.95,
-                    forecast_size = 15,
-                    sliding_size = 15,
-                    models = ['RandomForest','ExtraTrees', 'GBR', 'KNN', 'GeneralizedLR',
-                              'XGBoost', 'AutoArima','Prophet','H2O_AutoML'],
-                    hparameters = parameters,
-                    granularity = "1h", # 1m,30m,1h,1d,1wk,1mo
-                    metric = "MAE"      # MAPE, MSE
+tsf = TSForecasting(train_size = 0.90,
+                    lags = 10,
+                    horizon = 10,
+                    sliding_size = 30,
+                    models = ['RandomForest', 'GeneralizedLR', 'GBR', 'KNN', 'GeneralizedLR',
+                              'XGBoost', 'LightGBM', 'Catboost', 'AutoGluon'],
+                    hparameters = hparameters,
+                    granularity = '1h',
+                    metric = 'MAE'
                     )
 tsf = tsf.fit_forecast(dataset = data)
 
 # Get Fit History
-fit_predictions, fit_performance = tsf.history()
+fit_performance = tsf.history()
 
 ## Forecast
 forecast = tsf.forecast()
@@ -127,25 +128,26 @@ forecast = tsf.forecast()
 ```  
 
 ## 2. TSForecasting - Extra Auxiliar Methods
-    
-The `engin_date` method converts and transforms columns of Datetime type into additional columns (Year, Day of the  Year, Season, Month, Day of the month, Day of the week, Weekend, Hour, Minute, Second) which will be added by association to the input dataset and subsequently deletes the original column if parameter `drop`=`True`.
 
-The `multivariable_lag` method creats all the past lags related to the target `y` feature automatically (in accordance to `range_lags` parameter) and adds each constructed column into the dataset.
+The `make_timeseries` method transforms a DataFrame into a format ready for time series analysis. This transformation prepares data sets for forecasting future values based on historical data, optimizing the input for subsequent model training and analysis, taking into consideration both the recency of data and the horizon of the prediction.
+
+* window_size: Determinates how many past observations each sample in the DataFrame should include. This creates a basis for learning from historical data.
+* horizon: Defines the number of future time steps to forecast. This addition provides direct targets for prediction models.
+* granularity: Adjusts the temporal detail from minutes to months, making the method suitable for diverse time series datasets (options -> 1m,30m,1h,1d,1wk,1mo).
+* datetime_engineering: When activated enriches the dataset with extra date-time features, such as year, month, and day of the week, potentialy enhancing the predictive capabilities of the model.
  
 ```py   
 
-# Feature Engineering 
+from tsforecasting.forecasting import Processing
 
-from tsforecasting.treatment import Treatment
+pr = Processing()
 
-tr = Treatment()
+data = pr.make_timeseries(dataset = data,
+				  window_size = 10, 
+				  horizon = 2, 
+				  granularity = '1h',
+				  datetime_engineering = True)
 
-data = tr.engin_date(dataset = data,
-                     drop = False) 
-
-data = tr.multivariable_lag(dataset = data,
-                            range_lags = [1,10],
-                            drop_na = True)    
 ```
     
 ## License
