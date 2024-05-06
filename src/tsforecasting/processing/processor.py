@@ -108,6 +108,7 @@ class Processing:
         if window_size > len(dataset):
             raise ValueError("The lags length (window_size) cannot exceed the length of the time_series.")
 
+        if granularity=='1wk': granularity="1W"
         time_series = dataset[self.target].values
         date_series = dataset['Date'].values  
 
@@ -117,7 +118,17 @@ class Processing:
         # Create windows and corresponding dates
         windows = np.array([time_series[i:i + window_size] for i in range(max_window_index + 1)])
             
-        extended_dates = np.array([date_series[window_size:][-1] + pd.Timedelta(granularity, n=i + 1) for i in range(1)])
+        if granularity=='1mo':
+            granularity = '1M'
+            extended_dates = np.array([
+                                        date_series[window_size:][-1] + (
+                                            pd.DateOffset(months=(int(granularity[:-1]) * (i + 1))) if granularity.endswith('M') else
+                                            pd.DateOffset(years=(int(granularity[:-1]) * (i + 1))) if granularity.endswith('Y') else
+                                            pd.Timedelta(granularity, n=(i + 1))
+                                        ) for i in range(1)
+                                    ])
+        else:
+            extended_dates = np.array([date_series[window_size:][-1] + pd.Timedelta(granularity, n=i + 1) for i in range(1)])
         date_col = np.concatenate([date_series[window_size:], extended_dates])
         date_col = pd.to_datetime(date_col, unit='ns')
         
