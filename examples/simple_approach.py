@@ -34,7 +34,7 @@ tsf = TSForecasting(train_size = 0.865,
                     models = ['RandomForest', 'GeneralizedLR', 'GBR', 'KNN', 'GeneralizedLR',
                               'XGBoost', 'LightGBM', 'Catboost', 'AutoGluon'],
                     hparameters = hparameters,
-                    granularity = '1d',
+                    granularity = '1mo',
                     metric = 'MAE'
                    )
 
