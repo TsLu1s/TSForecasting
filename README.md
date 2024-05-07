@@ -111,7 +111,7 @@ tsf = TSForecasting(train_size = 0.90,
                     lags = 10,
                     horizon = 10,
                     sliding_size = 30,
-                    models = ['RandomForest', 'GeneralizedLR', 'GBR', 'KNN', 'GeneralizedLR',
+                    models = ['RandomForest', 'ExtraTrees', 'GBR', 'KNN', 'GeneralizedLR',
                               'XGBoost', 'LightGBM', 'Catboost', 'AutoGluon'],
                     hparameters = hparameters,
                     granularity = '1h',
@@ -143,10 +143,10 @@ from tsforecasting.forecasting import Processing
 pr = Processing()
 
 data = pr.make_timeseries(dataset = data,
-				  window_size = 10, 
-				  horizon = 2, 
-				  granularity = '1h',
-				  datetime_engineering = True)
+			  window_size = 10, 
+			  horizon = 2, 
+			  granularity = '1h',
+			  datetime_engineering = True)
 
 ```
     
