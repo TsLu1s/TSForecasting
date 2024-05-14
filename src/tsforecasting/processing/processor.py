@@ -83,15 +83,15 @@ class Processing:
         return X
     
     def make_timeseries(self, 
-                        dataset: pd.DataFrame,
-                        window_size: int, 
-                        horizon: int, 
-                        granularity : str = '1d',
-                        datetime_engineering : bool = True):
+                    dataset: pd.DataFrame,
+                    window_size: int, 
+                    horizon: int, 
+                    granularity: str = '1d',
+                    datetime_engineering: bool = True):
         """
         Transforms a DataFrame into a single DataFrame containing sequential windows and horizon predictions,
         including NaNs where full horizon data isn't available. This allows using all available data for training up to the last point.
-
+    
         Args:
             dataset (pd.DataFrame): A DataFrame with at least a 'y' column for time series data and a 'Date' column.
             window_size (int): The number of time steps in each window, indicating how many past observations each input sample includes.
@@ -100,58 +100,58 @@ class Processing:
         Returns:
             pd.DataFrame: A DataFrame where each row represents a window of observations and horizon predictions,
                           starting with the date of the window, followed by lag features, and then horizon predictions.
-
+    
         Raises:
             ValueError: If the `window_size` is larger than the input array length, which would make windowing impossible.
         """
         
         if window_size > len(dataset):
             raise ValueError("The lags length (window_size) cannot exceed the length of the time_series.")
-
-        if granularity=='1wk': granularity="1W"
+    
         time_series = dataset[self.target].values
         date_series = dataset['Date'].values  
-
+    
         # Calculate the maximum index for creating windows
         max_window_index = len(time_series) - window_size
-
+    
         # Create windows and corresponding dates
         windows = np.array([time_series[i:i + window_size] for i in range(max_window_index + 1)])
-            
-        if granularity=='1mo':
-            granularity = '1M'
-            extended_dates = np.array([
-                                        date_series[window_size:][-1] + (
-                                            pd.DateOffset(months=(int(granularity[:-1]) * (i + 1))) if granularity.endswith('M') else
-                                            pd.DateOffset(years=(int(granularity[:-1]) * (i + 1))) if granularity.endswith('Y') else
-                                            pd.Timedelta(granularity, n=(i + 1))
-                                        ) for i in range(1)
-                                    ])
-        else:
-            extended_dates = np.array([date_series[window_size:][-1] + pd.Timedelta(granularity, n=i + 1) for i in range(1)])
-        date_col = np.concatenate([date_series[window_size:], extended_dates])
-        date_col = pd.to_datetime(date_col, unit='ns')
-        
+        window_dates = date_series[window_size - 1:]  # Date corresponding to the end of each window
+    
         # Create horizons, allowing NaNs for the future windows
         horizons = np.array([time_series[i + window_size:i + window_size + horizon] if i + window_size + horizon <= len(time_series)
-                             else np.concatenate([time_series[i + window_size:len(time_series)], np.full((i + window_size + horizon - len(time_series)), np.nan)])
+                             else np.concatenate([time_series[i + window_size:], np.full((i + window_size + horizon - len(time_series)), np.nan)])
                              for i in range(max_window_index + 1)])
-
+    
+        # Add future NaN horizons
+        future_dates = [pd.to_datetime(date_series[-1])] #+ pd.Timedelta(granularity) * (i + 1) for i in range(horizon)]
+        future_windows = [time_series[-window_size:] for _ in range(horizon)]
+        future_horizons = np.array([np.full((horizon,), np.nan) for _ in range(horizon)])
+    
+        # Combine past and future windows and horizons
+        windows = np.concatenate([windows, future_windows[:1]])
+        horizons = np.concatenate([horizons, future_horizons[:1]])
+        window_dates = np.concatenate([window_dates, future_dates[:1]])
+    
+        # Ensure window_dates are datetime
+        window_dates = pd.to_datetime(window_dates)
+    
         # Column names for windows and horizons
         self.lag_cols = [f'y_lag_{i+1}' for i in range(window_size)]
         self.horizon_cols = [f'y_horizon_{i+1}' for i in range(horizon)]
-
+    
         # Create DataFrame for lags and horizons
         lag_df = pd.DataFrame(windows, columns=self.lag_cols)
         horizon_df = pd.DataFrame(horizons, columns=self.horizon_cols)
-
+    
         # Combine into one DataFrame
         X = pd.concat([lag_df, horizon_df], axis=1).reset_index(drop=True)
-        X.insert(0, 'Date', date_col)
+        X.insert(0, 'Date', window_dates)
         
         if datetime_engineering:
             X = self.engin_date(dataset = X,
                                 drop = True)
+        X = X.head(X.shape[0]-1)
         
         self.target_cols = [col for col in X.columns if 'horizon' in col]
         self.input_cols = [col for col in X.columns if col not in self.target_cols]
