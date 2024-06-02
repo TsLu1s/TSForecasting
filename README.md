@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-  <h2 align="center"> TSForecasting - Automated Time Series Forecasting Framework
+  <h2 align="center"> TSForecasting: Automated Time Series Forecasting Framework
   <br>
   
 ## Framework Contextualization <a name = "ta"></a>
