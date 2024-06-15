@@ -134,7 +134,7 @@ class TSForecasting:
         forecast = self.processing.future_timestamps(X,
                                                      self.horizon,
                                                      self.granularity)
-        
+        performance = self.history()
         me1, me2 = 'Mean Absolute Error','Max Error'
                 
         X = self.processing.make_timeseries(dataset = X, window_size = self.lags, horizon = self.horizon)
@@ -154,7 +154,7 @@ class TSForecasting:
                                                     test = test,
                                                     algo = self.selected_model).transpose().reset_index(drop=True) 
         
-        intervals = self.performance['Performance by Horizon'][self.performance['Performance by Horizon']['Model'] == self.selected_model].reset_index(drop=True)
+        intervals = performance['Performance by Horizon'][performance['Performance by Horizon']['Model'] == self.selected_model].reset_index(drop=True)
         # Compute confidence intervals for the forecast based on model performance.
         forecast['y_superior'], forecast['y_inferior'] = forecast['y'].add(intervals[me1]), forecast['y'].sub(intervals[me1])
         forecast['y_max_interval'], forecast['y_min_interval'] = forecast['y'].add(intervals[me2]), forecast['y'].sub(intervals[me2])
