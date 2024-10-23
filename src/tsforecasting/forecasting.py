@@ -1,5 +1,8 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+
+from typing import Optional
+
 from tsforecasting.configs.parameters import model_configurations 
 from tsforecasting.processing.processor import Processing 
 from tsforecasting.training.validation import Training 
@@ -121,27 +124,39 @@ class TSForecasting:
         
         return self.performance
     
-    def forecast(self):
+    def forecast(self, dataset: Optional[pd.DataFrame] = None) -> pd.DataFrame:
         """
         Uses the selected best model to make future predictions. This method also computes confidence intervals
         for the forecasts based on historical model performance.
-
+        
+        Args:
+            dataset (Optional[pd.DataFrame]): Input dataset for forecasting. If None, uses self.dataset.
+            
         Returns:
-        pd.DataFrame: A DataFrame containing the forecasted values along with upper and lower confidence intervals.
+            pd.DataFrame: A DataFrame containing the forecasted values along with upper and lower confidence intervals.
+    
+        Raises:
+            AssertionError: If the dataset doesn't contain the required 'Date' and 'y' columns.
         """
-        X = self.dataset.copy()
+        X = dataset.copy() if dataset is not None else self.dataset.copy()
+    
+        # Assert required columns are present
+        required_cols = ['Date', 'y']
+        assert all(col in X.columns for col in required_cols), \
+            f"Dataset must contain the following columns: {required_cols}. Found: {list(X.columns)}"
+    
         # Prepare future timestamps based on the specified horizon and granularity.
         forecast = self.processing.future_timestamps(X,
-                                                     self.horizon,
-                                                     self.granularity)
+                                                    self.horizon,
+                                                    self.granularity)
         performance = self.history()
-        me1, me2 = 'Mean Absolute Error','Max Error'
+        me1, me2 = 'Mean Absolute Error', 'Max Error'
                 
-        X = self.processing.make_timeseries(dataset = X, window_size = self.lags, horizon = self.horizon)
+        X = self.processing.make_timeseries(dataset=X, window_size=self.lags, horizon=self.horizon)
         
-        self.timeseries = X.copy() # Save the feature-engineered time series for potential future use.
+        self.timeseries = X.copy()  # Save the feature-engineered time series for potential future use.
         
-        train, test = X.iloc[:-self.horizon,:], X.tail(1) # Split the data into fitting and future forecast sets.
+        train, test = X.iloc[:-self.horizon,:], X.tail(1)  # Split the data into fitting and future forecast sets.
         
         # Standardize features using StandardScaler
         self.scaler = self.scaler.fit(train[self.processing.input_cols])
@@ -150,9 +165,9 @@ class TSForecasting:
         test[self.processing.input_cols] = self.scaler.transform(test[self.processing.input_cols])
         
         # Perform forecasting using the selected model and integrate forecasted values.
-        forecast['y'] = self.validation.fit_predict(train = train,
-                                                    test = test,
-                                                    algo = self.selected_model).transpose().reset_index(drop=True) 
+        forecast['y'] = self.validation.fit_predict(train=train,
+                                                    test=test,
+                                                    algo=self.selected_model).transpose().reset_index(drop=True) 
         
         intervals = performance['Performance by Horizon'][performance['Performance by Horizon']['Model'] == self.selected_model].reset_index(drop=True)
         # Compute confidence intervals for the forecast based on model performance.
