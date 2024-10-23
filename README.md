@@ -1,7 +1,7 @@
+[![LinkedIn][linkedin-shield]][linkedin-url]
 [![Contributors][contributors-shield]][contributors-url]
 [![Stargazers][stars-shield]][stars-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 [![Downloads][downloads-shield]][downloads-url]
 [![Monthly Downloads][downloads-month-shield]][downloads-month-url]
 
