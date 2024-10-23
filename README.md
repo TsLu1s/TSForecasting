@@ -1,9 +1,3 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Stargazers][stars-shield]][stars-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 <br>
 <p align="center">
   <h2 align="center"> TSForecasting: Automated Time Series Forecasting Framework
@@ -129,7 +123,7 @@ tsf = tsf.fit_forecast(dataset = data)
 fit_performance = tsf.history()
 
 ## Forecast
-forecast = tsf.forecast(dataset = data)
+forecast = tsf.forecast()
 
 ```  
 
@@ -163,15 +157,3 @@ Distributed under the MIT License. See [LICENSE](https://github.com/TsLu1s/TSFor
 ## Contact 
  
 Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
-
-
-
-[contributors-shield]: https://img.shields.io/github/contributors/TsLu1s/TSForecasting.svg?style=for-the-badge
-[contributors-url]: https://github.com/TsLu1s/TSForecasting/graphs/contributors
-[stars-shield]: https://img.shields.io/github/stars/TsLu1s/TSForecasting.svg?style=for-the-badge
-[stars-url]: https://github.com/TsLu1s/TSForecasting/stargazers
-[license-shield]: https://img.shields.io/github/license/TsLu1s/TSForecasting.svg?style=for-the-badge
-[license-url]: https://github.com/TsLu1s/TSForecasting/blob/main/LICENSE
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/luísfssantos/
-
