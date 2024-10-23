@@ -166,11 +166,11 @@ Luis Santos - [LinkedIn](https://www.linkedin.com/in/lu%C3%ADsfssantos/)
 
 
 
-[contributors-shield]: https://img.shields.io/github/contributors/luisferreira97/AutoOC.svg?style=for-the-badge
-[contributors-url]: https://github.com/luisferreira97/AutoOC/graphs/contributors
-[stars-shield]: https://img.shields.io/github/stars/luisferreira97/AutoOC.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/TsLu1s/TSForecasting.svg?style=for-the-badge
+[contributors-url]: https://github.com/TsLu1s/TSForecasting/graphs/contributors
+[stars-shield]: https://img.shields.io/github/stars/TsLu1s/TSForecasting.svg?style=for-the-badge
 [stars-url]: https://github.com/TsLu1s/TSForecasting/stargazers
-[license-shield]: https://img.shields.io/github/license/luisferreira97/AutoOC.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/TsLu1s/TSForecasting.svg?style=for-the-badge
 [license-url]: https://github.com/TsLu1s/TSForecasting/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/luísfssantos/
