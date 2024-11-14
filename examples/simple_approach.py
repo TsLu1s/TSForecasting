@@ -44,4 +44,4 @@ tsf.fit_forecast(dataset = data)
 fit_performance = tsf.history()
 
 ## Forecast
-forecast = tsf.forecast()
+forecast = tsf.forecast(dataset = data)
